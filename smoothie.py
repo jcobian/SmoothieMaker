@@ -1,4 +1,5 @@
 import pygame
+from blender import Blender
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def main(self):
@@ -15,7 +16,9 @@ class GameSpace:
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
+		self.blender = Blender(self,hspeed=5.0)
 		self.gameObjectsList = list()
+		self.gameObjectsList.append(self.blender)
 		
 		#start game loop
 		while 1:
@@ -25,7 +28,7 @@ class GameSpace:
 			#handle user inputs
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
-					pass
+					self.blender.move(event.key)
 				elif event.type == pygame.QUIT:
 					return	
 
