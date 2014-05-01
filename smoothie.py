@@ -25,17 +25,7 @@ class GameSpace:
 			#handle user inputs
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_SPACE:
-						self.player.fire(self.laserList)
-					else:
-						self.player.move(event.key)
-				elif event.type == pygame.MOUSEBUTTONDOWN:
-					self.player.fire(self.laserList)
-				elif event.type == pygame.MOUSEBUTTONUP:
-					self.player.stopFire()
-				elif event.type == pygame.KEYUP:
-					if event.key == pygame.K_SPACE:
-						self.player.stopFire()
+					pass
 				elif event.type == pygame.QUIT:
 					return	
 
