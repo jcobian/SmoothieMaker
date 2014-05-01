@@ -3,6 +3,9 @@ from blender import Blender
 from fruit import Fruit
 #main gamespace where the overarching game structure is
 class GameSpace:
+	def __init__(self):
+		self.listOfFruitImages=['strawberry.png','banana.png']
+		self.listOfVegetableImages = list()
 	def main(self):
 		#1) basic initialization
 		pygame.init()
@@ -10,7 +13,7 @@ class GameSpace:
 		#so that key holds can be recognized.
 		pygame.key.set_repeat(17,17)	
 		
-		self.size = self.width, self.height = 640,900
+		self.size = self.width, self.height = 900,900
 		self.black = 0,0,0
 		self.screen = pygame.display.set_mode(self.size)
 
