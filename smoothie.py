@@ -2,6 +2,7 @@ import pygame
 from blender import Blender
 from fruit import Fruit
 from progressBar import ProgressBar
+from blackRect import BlackRect
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self):
@@ -29,10 +30,12 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 		self.blender = Blender(self,hspeed=5.0)
 		self.progressBar = ProgressBar(self)
+		self.blackRect = BlackRect(self)
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
 		self.gameObjectsList.append(self.progressBar)
+		#self.gameObjectsList.append(self.blackRect)
 		#start game loop
 		while 1:
 			#4) clock tick regulation
@@ -70,11 +73,14 @@ class GameSpace:
 			for obj in self.gameObjectsList:
 				self.screen.blit(obj.image,obj.rect)
 			
+			
 
 			pygame.display.flip()
 
 	def addToScore(self):
 		self.score+=10
+		if self.score > self.winningScore:
+			self.score = self.winningScore
 		self.checkIfWon()
 	def subFromScore(self):
 		self.score-=20
