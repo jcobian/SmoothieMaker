@@ -1,4 +1,5 @@
 from twisted.internet import protocol,reactor
+from twisted.internet.task import LoopingCall
 import sys
 from smoothie import GameSpace
 class Client():
