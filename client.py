@@ -42,7 +42,7 @@ class CommandConn(protocol.Protocol):
 				opponent = pickle.loads(pd)
 				self.gs.updateOpponent(opponent)
 				oppScore = int(comp[2])
-				self.gs.opponentScore = opponentScore
+				self.gs.opponentScore = oppScore
 				self.sendMyData()
 		'''
 		elif data.startswith('Request'):
