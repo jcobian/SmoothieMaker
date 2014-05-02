@@ -32,9 +32,11 @@ class CommandConn(protocol.Protocol):
 			comp = data.split(':')
 			requestType = comp[1]
 			if requestType == 'Blender':
-				print 'Received request for my blender'
+				#print 'Received request for my blender'
 				pd = pickle.dumps(self.gs.blender.rect)
-				self.transport.write('Response:'+str(self.playerNumber)+':Blender:'+pd)
+				self.transport.write('Response:'+str(self.playerNumber)+':Blender:')
+				#self.transport.write('Response:'+str(self.playerNumber)+':Blender:'+pd)
+				print 'done pickling'
 		elif data.startswith('Response'):
 			comp = data.split(':')
 			responseType = comp[1]
