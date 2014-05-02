@@ -9,11 +9,20 @@ class Client():
 
 class CommandConn(protocol.Protocol):
 	def __init__(self):
-		pass
+		self.numMessagesReceived = 0
 	def connectionMade(self):
-		self.transport.write('give me a player number')
+		self.transport.write('connect')
 	def dataReceived(self,data):
-		print data
+		if data == 'waiting for players':
+			print 'Waiting for another player..'
+		elif data.startsWith('PN'):
+			comp = data.split(':')
+			playerNumber = int(comp[1])
+			print 'Game Started: You are Player',playerNumber
+			gs = GameSpace(playerNumber)
+			gs.main()
+
+		self.numMessagesReceived+=1
 
 class CommandConnFactory(protocol.ClientFactory):
 	def buildProtocol(self,addr):

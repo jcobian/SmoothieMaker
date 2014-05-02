@@ -9,12 +9,12 @@ from scoreLabel import ScoreLabel
 from client import Client
 #main gamespace where the overarching game structure is
 class GameSpace:
-	def __init__(self):
+	def __init__(self,playerNumber):
 		self.listOfFruitImages=['strawberry.png','banana.png']
 		self.listOfVegetableImages = ['potato.png']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png']
 		self.listOfFrozenVegetableImages = ['potatofrozen.png']
-
+		self.playerNumber = playerNumber
 		self.fruits = list()
 		self.score = 0
 		self.winningScore = 100 
@@ -36,7 +36,9 @@ class GameSpace:
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
-		self.blender = Blender(self,hspeed=7.0)
+		#get playernumber from server
+
+		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber)
 		#self.progressBar = ProgressBar(self)
 		#self.blackRect = BlackRect(self)
 		self.scoreLabel = ScoreLabel(self)
@@ -46,8 +48,8 @@ class GameSpace:
 		#self.gameObjectsList.append(self.progressBar)
 		#self.gameObjectsList.append(self.blackRect)
 		
-		lc = LoopingCall(self.gameLoopIteration)
-		lc.start(1/60)
+		#lc = LoopingCall(self.gameLoopIteration)
+		#lc.start(1/60)
 		#start game loop
 		while 1:
 			#runs an iteration, returns 1 if they hit quit button
@@ -97,11 +99,14 @@ class GameSpace:
 		#7 display game objects
 		self.screen.fill(self.black)
 
+
 		self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
 		for fr in self.fruits:
 			self.screen.blit(fr.image,fr.rect)
 		for obj in self.gameObjectsList:
 			self.screen.blit(obj.image,obj.rect)
+		#request a blender object from server then blit it on the screen here
+
 		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
 			
 		
@@ -136,5 +141,3 @@ if __name__ == '__main__':
 	host = sys.argv[1]
 	port = int(sys.argv[2])
 	client = Client(host,port)
-	#gs = GameSpace()
-	#gs.main()

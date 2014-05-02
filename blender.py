@@ -3,9 +3,13 @@ class Blender(pygame.sprite.Sprite):
 	def __init__(self, gs=None,hspeed=0.0,playerNumber=1):
 			pygame.sprite.Sprite.__init__(self)
 			self.gs = gs
-			self.image = pygame.image.load("blender.png")
-			self.rect = self.image.get_rect()
 			self.playerNumber = playerNumber
+			if self.playerNumber == 1:
+				self.image = pygame.image.load("blender.png")
+			elif self.playerNumber == 2:
+				self.image = pygame.image.load("blender2.png")
+			
+			self.rect = self.image.get_rect()
 
 			if self.playerNumber == 1:
 				self.rect = self.rect.move(self.gs.width/4,self.gs.height-self.rect.height)
