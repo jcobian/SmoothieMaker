@@ -22,10 +22,10 @@ class GameSpace:
 		#so that key holds can be recognized.
 		pygame.key.set_repeat(17,17)	
 		
-		self.size = self.width, self.height = 1000,800
+		self.size = self.width, self.height = 1280,800
 		self.black = 0,0,0
 		self.screen = pygame.display.set_mode(self.size)
-
+		self.current_ticks = 0
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
@@ -38,20 +38,20 @@ class GameSpace:
 		self.gameObjectsList.append(self.blender)
 		#self.gameObjectsList.append(self.progressBar)
 		#self.gameObjectsList.append(self.blackRect)
-		self.gameLoopIteration()
+		
 		#start game loop
 		while 1:
 			#runs an iteration, returns 1 if they hit quit button
 			if self.gameLoopIteration():
 				return
+
 	def gameLoopIteration(self):
 		#4) clock tick regulation
 		self.clock.tick(60) #frame rate
-		ticks = pygame.time.get_ticks()
-		if ticks%60 == 0:
+		if self.current_ticks%60 == 0:
 			fruit = Fruit(self,type='fruit')
 			self.fruits.append(fruit)
-		if ticks % 90 == 0:
+		if self.current_ticks % 90 == 0:
 			veggie = Fruit(self,type='vegetable')
 			self.fruits.append(veggie)
 
@@ -84,6 +84,7 @@ class GameSpace:
 		
 
 		pygame.display.flip()
+		self.current_ticks+=1
 		return 0
 		
 
