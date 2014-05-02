@@ -18,6 +18,7 @@ class GameSpace:
 		self.fruits = list()
 		self.score = 0
 		self.winningScore = 100 
+		self.opponent = None
 	def main(self):
 		#1) basic initialization
 		pygame.init()
@@ -104,8 +105,10 @@ class GameSpace:
 			self.screen.blit(fr.image,fr.rect)
 		for obj in self.gameObjectsList:
 			self.screen.blit(obj.image,obj.rect)
+		if self.opponent is not None:
+			self.screen.blit(self.opponent.image,opponent.rect)
 		#request a blender object from server then blit it on the screen here
-		#self.commandConn.getOpponentBlender()
+		self.commandConn.getOpponentBlender()
 		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
 			
 		
@@ -115,7 +118,8 @@ class GameSpace:
 		self.current_ticks+=1
 		return 0
 		
-
+	def updateOpponent(self,opponent):
+		self.opponent = opponent
 	def addToScore(self):
 		self.score+=10
 		if self.score > self.winningScore:

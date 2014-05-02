@@ -1,6 +1,7 @@
 from twisted.internet import protocol,reactor
 from twisted.internet.task import LoopingCall
 import sys
+import pickle
 from smoothie import GameSpace
 class Client():
 	def __init__(self,host,port):
@@ -21,17 +22,28 @@ class CommandConn(protocol.Protocol):
 			print 'Waiting for another player..'
 		elif data.startswith('PN'):
 			comp = data.split(':')
-			playerNumber = int(comp[1])
-			print 'Game Started: You are Player',playerNumber
-			gs = GameSpace(self,playerNumber)
-			gs.main()
+			self.playerNumber = int(comp[1])
+			print 'Game Started: You are Player',self.playerNumber
+			self.gs = GameSpace(self,self.playerNumber)
+			self.gs.main()
 			lc = LoopingCall(gs.gameLoopIteration)
 			lc.start(1/60)
-		elif data == 'Response:Blender':
-			pass
+		elif data.startswith('Request');
+			comp = data.split(':')
+			requestType = comp[1]
+			if requestType == 'Blender':
+				pd = pickle.dumps(self.gs.blender)
+				self.transport.write('Response:'+str(self.playerNumber)+':Blender:'+pd)
+		elif data.startswith('Response'):
+			comp = data.split(':')
+			responseType = comp[1]
+			if responseType == 'Blender':
+				pd = comp[2]
+				opponent = pickle.loads(pd)
+				gs.updateOpponent(opponent)
 
 	def getOpponentBlender(self):
-		self.transport.write('Request:Blender')
+		self.transport.write('Request:'+str(self.playerNumber)+':Blender')
 
 
 class CommandConnFactory(protocol.ClientFactory):
