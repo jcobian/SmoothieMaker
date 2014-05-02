@@ -15,6 +15,12 @@ class CommandConn(protocol.Protocol):
 	def __init__(self,client):
 		self.numMessagesReceived = 0
 		self.client = client
+	def sendMyData(self):
+		pd = pickle.dumps(self.gs.blender.rect)
+		self.transport.write(str(self.playerNumber)+":"+'Rect:'+pd)
+		percentage = self.gs.score/float(self.gs.winningScore)
+		#self.transport.write(str(self.playerNumber)+":"+'Percentage:'+str(percentage))
+
 	def connectionMade(self):
 		self.transport.write('connect')
 	def dataReceived(self,data):
@@ -28,15 +34,20 @@ class CommandConn(protocol.Protocol):
 			self.gs.main()
 			lc = LoopingCall(self.gs.gameLoopIteration)
 			lc.start(1/60)
-			pd = pickle.dumps(self.gs.blender.rect)
-			self.transport.write(str(self.playerNumber)+":"+pd)
+			self.sendMyData()
+			
 		else:
-				print 'got a pickle!'
-				pd = data
-				opponent = pickle.loads(pd)
-				self.gs.updateOpponent(opponent)
-				pd = pickle.dumps(self.gs.blender.rect)
-				self.transport.write(str(self.playerNumber)+":"+pd)
+				comp = data.split(':')
+				playerFrom = int(comp[0])
+				objType = comp[1]
+				obj = comp[2]
+				if objType == 'Rect':	
+					opponent = pickle.loads(obj)
+					self.gs.updateOpponent(opponent)
+				elif objType == 'Percentage':
+					opponentPercentage = float(obj)*100
+					self.gs.opponentScoreLabel.setScore(opponentPercentage)	
+				self.sendMyData()
 		'''
 		elif data.startswith('Request'):
 			comp = data.split(':')

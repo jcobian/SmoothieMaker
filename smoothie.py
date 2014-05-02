@@ -52,6 +52,7 @@ class GameSpace:
 		#self.progressBar = ProgressBar(self)
 		#self.blackRect = BlackRect(self)
 		self.scoreLabel = ScoreLabel(self)
+		self.scoreLabelPlayer2 = ScoreLabel(self)
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
@@ -104,19 +105,21 @@ class GameSpace:
 		for fr in self.fruits:
 			fr.tick()
 		self.scoreLabel.tick()
+		self.scoreLabelPlayer2.tick()
 		
 		#7 display game objects
 		self.screen.fill(self.black)
 
 
 		self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
+		self.screen.blit(self.scoreLabelPlayer2.label,self.scoreLabelPlayer2.rect)
+
+
 		for fr in self.fruits:
 			self.screen.blit(fr.image,fr.rect)
 		for obj in self.gameObjectsList:
 			self.screen.blit(obj.image,obj.rect)
 		self.screen.blit(self.opponent.image,self.opponent.rect)
-		#request a blender object from server then blit it on the screen here
-		#self.commandConn.getOpponentBlender()
 		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
 			
 		
