@@ -6,7 +6,6 @@ from fruit import Fruit
 from progressBar import ProgressBar
 from blackRect import BlackRect
 from scoreLabel import ScoreLabel
-from client import Client
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self,playerNumber):
@@ -137,7 +136,4 @@ class GameSpace:
 
 			
 		
-if __name__ == '__main__':
-	host = sys.argv[1]
-	port = int(sys.argv[2])
-	client = Client(host,port)
+

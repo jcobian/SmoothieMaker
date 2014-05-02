@@ -1,6 +1,6 @@
 from twisted.internet import protocol,reactor
-from smoothie import GameSpace
 import sys
+from smoothie import GameSpace
 class Client():
 	def __init__(self,host,port):
 		self.host = host
@@ -28,6 +28,11 @@ class CommandConn(protocol.Protocol):
 class CommandConnFactory(protocol.ClientFactory):
 	def buildProtocol(self,addr):
 		return CommandConn()
+
+if __name__ == '__main__':
+	host = sys.argv[1]
+	port = int(sys.argv[2])
+	client = Client(host,port)
 
 
 
