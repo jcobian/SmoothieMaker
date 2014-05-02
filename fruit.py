@@ -10,6 +10,7 @@ class Fruit(pygame.sprite.Sprite):
 		fruitImage = self.gs.listOfFruitImages[randFruitInt]
 		self.image = pygame.image.load(fruitImage)
 		self.rect = self.image.get_rect()
+		self.colliderect = self.rect.inflate(0,self.rect.height*.9)
 
 		#get rand x pos
 		self.xpos = random.randint(0,self.gs.width-self.rect.width)
@@ -22,5 +23,7 @@ class Fruit(pygame.sprite.Sprite):
 	#on each tick, move down the screen
 	def tick(self):
 		self.rect = self.rect.move(0,self.vspeed)
+		if self.rect.top >= self.gs.height:
+			self.gs.fruits.remove(self)
 	
 

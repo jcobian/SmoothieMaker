@@ -5,7 +5,8 @@ from fruit import Fruit
 class GameSpace:
 	def __init__(self):
 		self.listOfFruitImages=['strawberry.png','banana.png']
-		self.listOfVegetableImages = list()
+		self.listOfVegetableImages = ['potato.png']
+		self.fruits = list()
 	def main(self):
 		#1) basic initialization
 		pygame.init()
@@ -24,14 +25,13 @@ class GameSpace:
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
-		counter = 0
 		#start game loop
 		while 1:
 			#4) clock tick regulation
 			self.clock.tick(60) #frame rate
 			if pygame.time.get_ticks() % 60 == 0:
 				fruit = Fruit(self)
-				self.gameObjectsList.append(fruit)
+				self.fruits.append(fruit)
 			#handle user inputs
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
@@ -42,14 +42,17 @@ class GameSpace:
 			#6 send a tick to every game object
 			for object in self.gameObjectsList:
 				object.tick()
-			
+			for fr in self.fruits:
+				fr.tick()
 			
 			#7 display game objects
 			self.screen.fill(self.black)
 			for object in self.gameObjectsList:
 				self.screen.blit(object.image,object.rect)
+			for fr in self.fruits:
+				self.screen.blit(fr.image,fr.rect)
+
 			pygame.display.flip()
-			counter+=1
 			
 		
 if __name__ == '__main__':
