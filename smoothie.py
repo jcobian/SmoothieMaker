@@ -6,6 +6,7 @@ from fruit import Fruit
 from progressBar import ProgressBar
 from blackRect import BlackRect
 from scoreLabel import ScoreLabel
+from playerLabel import PlayerLabel
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self,commandConn,playerNumber):
