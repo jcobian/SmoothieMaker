@@ -6,7 +6,8 @@ class PlayerLabel(pygame.sprite.Sprite):
 			self.white = 255,255,255
 			self.myfont = pygame.font.SysFont("monospace", size)
 			self.label = self.myfont.render(textLabel,1,self.white)
-			self.rect = (xpos, ypos)
-			
+			self.textPos = self.label.get_rect()
+			self.rect = (xpos-self.textPos.width/2, ypos-self.textPos.height/2)
+
 	def tick(self):
 		pass
