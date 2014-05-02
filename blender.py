@@ -10,7 +10,12 @@ class Blender(pygame.sprite.Sprite):
 
 			self.hspeed = hspeed
 	def tick(self):
-		pass
+		indicies = self.rect.collidelistall(self.gs.fruits)
+		for each index in indicies:
+			self.gs.fruits.pop(index)
+			print "deleted fruit"
+
+
 
 	def move(self,key):
 		if key == pygame.K_RIGHT:
