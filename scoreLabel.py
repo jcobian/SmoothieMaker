@@ -11,7 +11,7 @@ class ScoreLabel(pygame.sprite.Sprite):
 			if self.playerType == 'user':
 				self.rect = (0,50)
 			elif self.playerType == 'opponent':
-				self.rect = (0,self.gs.width-50)
+				self.rect = (self.gs.width-150,50)
 			
 
 	def tick(self):
