@@ -17,6 +17,7 @@ class GameSpace:
 		self.playerNumber = playerNumber
 		self.fruits = list()
 		self.score = 0
+		self.opponentScore = 0
 		self.winningScore = 100 
 
 		self.size = self.width, self.height = 1280,800
@@ -51,8 +52,8 @@ class GameSpace:
 
 		#self.progressBar = ProgressBar(self)
 		#self.blackRect = BlackRect(self)
-		self.scoreLabel = ScoreLabel(self)
-		self.scoreLabelPlayer2 = ScoreLabel(self)
+		self.scoreLabel = ScoreLabel(self,playerType='user')
+		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
@@ -105,14 +106,14 @@ class GameSpace:
 		for fr in self.fruits:
 			fr.tick()
 		self.scoreLabel.tick()
-		self.scoreLabelPlayer2.tick()
+		self.scoreLabelOpponent.tick()
 		
 		#7 display game objects
 		self.screen.fill(self.black)
 
 
 		self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
-		self.screen.blit(self.scoreLabelPlayer2.label,self.scoreLabelPlayer2.rect)
+		self.screen.blit(self.scoreLabelOpponent.label,self.scoreLabelOpponent.rect)
 
 
 		for fr in self.fruits:

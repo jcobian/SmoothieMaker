@@ -18,8 +18,8 @@ class CommandConn(protocol.Protocol):
 	def sendMyData(self):
 		pd = pickle.dumps(self.gs.blender.rect)
 		self.transport.write(str(self.playerNumber)+":"+'Rect:'+pd)
-		percentage = self.gs.score/float(self.gs.winningScore)
-		#self.transport.write(str(self.playerNumber)+":"+'Percentage:'+str(percentage))
+		percentage = self.gs.score
+		self.transport.write(str(self.playerNumber)+":"+'Score:'+str(percentage))
 
 	def connectionMade(self):
 		self.transport.write('connect')
@@ -44,9 +44,10 @@ class CommandConn(protocol.Protocol):
 				if objType == 'Rect':	
 					opponent = pickle.loads(obj)
 					self.gs.updateOpponent(opponent)
-				elif objType == 'Percentage':
-					opponentPercentage = float(obj)*100
-					self.gs.opponentScoreLabel.setScore(opponentPercentage)	
+				elif objType == 'Score':
+					opponentScore = int(obj)
+					self.gs.opponentScore = opponentScore
+					
 				self.sendMyData()
 		'''
 		elif data.startswith('Request'):
