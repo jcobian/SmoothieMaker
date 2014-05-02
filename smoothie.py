@@ -42,12 +42,12 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 		#get playernumber from server
 
-		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber)
+		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber,playerType='user')
 		opponentPlayerNumber = 1
 		if self.playerNumber == 1:
 			opponentPlayerNumber = 2
 
-		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber)
+		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber,playerType='opponent')
 
 		#self.progressBar = ProgressBar(self)
 		#self.blackRect = BlackRect(self)

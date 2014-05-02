@@ -1,9 +1,10 @@
 import pygame
 class Blender(pygame.sprite.Sprite):
-	def __init__(self, gs=None,hspeed=0.0,playerNumber=1):
+	def __init__(self, gs=None,hspeed=0.0,playerNumber=1,playerType='user'):
 			pygame.sprite.Sprite.__init__(self)
 			self.gs = gs
 			self.playerNumber = playerNumber
+			self.playerType = playerType
 			if self.playerNumber == 1:
 				self.image = pygame.image.load("blender.png")
 			elif self.playerNumber == 2:
@@ -11,20 +12,22 @@ class Blender(pygame.sprite.Sprite):
 			
 			self.rect = self.image.get_rect()
 
-			if self.playerNumber == 1:
+			
+			if self.playerType == 'user':
 				self.rect = self.rect.move(self.gs.width/4,self.gs.height-self.rect.height)
-			elif self.playerNumber == 2:
+			elif self.playerType == 'opponent':
 				self.rect = self.rect.move(3*self.gs.width/4,self.gs.height-self.rect.height)
+			
 
 
 
 			self.colliderect = self.rect.inflate(-self.rect.width*.18,-self.rect.height*.9)
 			self.colliderect = self.colliderect.move((-self.rect.width*.18)/2,(-self.rect.height*.9)/2)
 			self.orig_image = self.image
-			if self.playerNumber == 1:
+			if self.playerType == 'user':
 				self.leftBound = 0
 				self.rightBound = self.gs.width/2
-			elif self.playerNumber == 2:
+			elif self.playerType == 'opponent':
 				self.leftBound = self.gs.width/2
 				self.rightBound = self.gs.width
 
