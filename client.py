@@ -15,7 +15,7 @@ class CommandConn(protocol.Protocol):
 	def dataReceived(self,data):
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
-		elif data.startsWith('PN'):
+		elif data.startswith('PN'):
 			comp = data.split(':')
 			playerNumber = int(comp[1])
 			print 'Game Started: You are Player',playerNumber
