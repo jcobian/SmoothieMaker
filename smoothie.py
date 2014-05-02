@@ -1,6 +1,7 @@
 import pygame
 from blender import Blender
 from fruit import Fruit
+from progressBar import ProgressBar
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self):
@@ -27,9 +28,11 @@ class GameSpace:
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
 		self.blender = Blender(self,hspeed=5.0)
+		self.progressBar = ProgressBar(self)
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
+		self.gameObjectsList.append(self.progressBar)
 		#start game loop
 		while 1:
 			#4) clock tick regulation
