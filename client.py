@@ -26,7 +26,7 @@ class CommandConn(protocol.Protocol):
 			print 'Game Started: You are Player',self.playerNumber
 			self.gs = GameSpace(self,self.playerNumber)
 			self.gs.main()
-			lc = LoopingCall(gs.gameLoopIteration)
+			lc = LoopingCall(self.gs.gameLoopIteration)
 			lc.start(1/60)
 		elif data.startswith('Request'):
 			comp = data.split(':')
