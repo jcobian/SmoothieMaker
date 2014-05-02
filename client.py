@@ -28,7 +28,7 @@ class CommandConn(protocol.Protocol):
 			self.gs.main()
 			lc = LoopingCall(gs.gameLoopIteration)
 			lc.start(1/60)
-		elif data.startswith('Request');
+		elif data.startswith('Request'):
 			comp = data.split(':')
 			requestType = comp[1]
 			if requestType == 'Blender':
