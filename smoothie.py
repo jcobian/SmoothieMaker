@@ -131,6 +131,7 @@ class GameSpace:
 		
 	def updateOpponent(self,rect):
 		self.opponent.rect = rect
+		self.opponent.rect = self.opponent.rect.move(self.width/2,0)
 	def addToScore(self):
 		self.score+=10
 		if self.score > self.winningScore:
