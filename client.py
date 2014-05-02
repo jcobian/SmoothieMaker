@@ -37,33 +37,16 @@ class CommandConn(protocol.Protocol):
 			self.sendMyData()
 			
 		else:
-				comp = data.split(':')
-				pd = comp[1]
-				opponent = pickle.loads(pd)
-				self.gs.updateOpponent(opponent)
-				oppScore = int(comp[2])
-				self.gs.opponentScore = oppScore
-				self.sendMyData()
-		'''
-		elif data.startswith('Request'):
-			comp = data.split(':')
-			requestType = comp[1]
-			if requestType == 'Blender':
-				#print 'Received request for my blender'
-				pd = pickle.dumps(self.gs.blender.rect)
-				self.transport.write('Response:'+str(self.playerNumber)+':Blender:')
-				#self.transport.write('Response:'+str(self.playerNumber)+':Blender:'+pd)
-				print 'done pickling'
-		elif data.startswith('Response'):
-			comp = data.split(':')
-			responseType = comp[1]
-			if responseType == 'Blender':
-				print 'SUCCESS, UNPICKLING HERE'
-				pd = comp[2]
-				opponent = pickle.loads(pd)
-				self.gs.updateOpponent(opponent)
-				sys.exit()
-		'''
+			self.parseData(data)
+			self.sendMyData()
+	def parseData(self,data):
+		comp = data.split(':')
+		pd = comp[1]
+		opponent = pickle.loads(pd)
+		self.gs.updateOpponent(opponent)
+		oppScore = int(comp[2])
+		self.gs.opponentScore = oppScore
+
 
 	
 
