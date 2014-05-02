@@ -57,8 +57,8 @@ class GameSpace:
 		self.scoreLabel = ScoreLabel(self,playerType='user')
 		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
 
-		self.youLabel = PlayerLabel(self,"You",self.width/4,10,50)
-		self.oppLabel = PlayerLabel(self,"You",3*self.width/4,10,50)
+		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=10,size=50)
+		self.oppLabel = PlayerLabel(self,textLabel="You",xpos=3*self.width/4,ypos=10,size=50)
 
 
 		self.gameObjectsList = list()
@@ -68,7 +68,7 @@ class GameSpace:
 
 	def goToGameOver(self):
 		self.screen.fill(self.black)
-		winnerLabel = PlayerLabel(self,"You Won!",self.width/2,self.height/2,50)
+		winnerLabel = PlayerLabel(self,textLabel="You Won!",xpos=self.width/2,ypos=self.height/2,size=50)
 		self.screen.blit(winnerLabel.label,winnerLabel.rect)
 
 
