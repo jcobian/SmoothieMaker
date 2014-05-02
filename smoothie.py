@@ -25,6 +25,7 @@ class GameSpace:
 		self.white = 255,255,255
 		self.point1 = self.width/2,0
 		self.point2 = self.width/2,self.height
+		self.gameIsOver = False
 
 
 	def main(self):
@@ -55,80 +56,92 @@ class GameSpace:
 		self.scoreLabel = ScoreLabel(self,playerType='user')
 		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
 
+		self.youLabel = PlayerLabel(self,"You",self.width/4,10,50)
+		self.oppLabel = PlayerLabel(self,"You",3*self.width/4,10,50)
+
+
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
-		#self.gameObjectsList.append(self.progressBar)
-		#self.gameObjectsList.append(self.blackRect)
 		
-	
-		#start game loop
-		#while 1:
-			#runs an iteration, returns 1 if they hit quit button
-			#if self.gameLoopIteration():
-				#return
+
+
+	def goToGameOver(self):
+		self.screen.fill(self.black)
+		winnerLabel = PlayerLabel(self,"You Won!",self.width/2,self.height/2,50)
+		self.screen.blit(winnerLabel.label,winnerLabel.rect)
+
+
 
 	def gameLoopIteration(self):
-		#4) clock tick regulation
-		#self.clock.tick(60) #frame rate
-		if self.current_ticks%60 == 0:
-			randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
-			xpos = random.randint(0,self.width/2)
-			vspeed = random.randint(3,6)
-			fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-			xpos += self.width/2
-			fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-			self.fruits.append(fruit)
-			self.fruits.append(fruit2)
+		if self.score >= self.winningScore:
+			self.goToGameOver('You')
+		elif self.opponentScore >= self.winningScore:
+			self.goToGameOver('Opponent')
+		else:
+			if self.current_ticks%60 == 0:
+				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
+				xpos = random.randint(0,self.width/2)
+				vspeed = random.randint(3,6)
+				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				xpos += self.width/2
+				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				self.fruits.append(fruit)
+				self.fruits.append(fruit2)
 
-		if self.current_ticks % 90 == 0:
-			xpos = random.randint(0,self.width/2)
-			randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
-			vspeed = random.randint(3,6)
-			veggie = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-			xpos+=self.width/2
-			veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-			self.fruits.append(veggie)
-			self.fruits.append(veggie2)
+			if self.current_ticks % 90 == 0:
+				xpos = random.randint(0,self.width/2)
+				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
+				vspeed = random.randint(3,6)
+				veggie = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				xpos+=self.width/2
+				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				self.fruits.append(veggie)
+				self.fruits.append(veggie2)
 
-		#handle user inputs
-		for event in pygame.event.get():
-			if event.type == pygame.KEYDOWN:
-				self.blender.move(event.key)
-			elif event.type == pygame.MOUSEBUTTONDOWN:
-				mx,my = pygame.mouse.get_pos()
-				self.freezeFruits(mx,my)
-			elif event.type == pygame.QUIT:
-				return 1	
+			#handle user inputs
+			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN:
+					self.blender.move(event.key)
+				elif event.type == pygame.MOUSEBUTTONDOWN:
+					mx,my = pygame.mouse.get_pos()
+					self.freezeFruits(mx,my)
+				elif event.type == pygame.QUIT:
+					return 1	
 
-		#6 send a tick to every game object
-		for obj in self.gameObjectsList:
-			obj.tick()
-		for fr in self.fruits:
-			fr.tick()
-		self.scoreLabel.tick()
-		self.scoreLabelOpponent.tick()
-		
-		#7 display game objects
-		self.screen.fill(self.black)
-
-
-		self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
-		self.screen.blit(self.scoreLabelOpponent.label,self.scoreLabelOpponent.rect)
-
-
-		for fr in self.fruits:
-			self.screen.blit(fr.image,fr.rect)
-		for obj in self.gameObjectsList:
-			self.screen.blit(obj.image,obj.rect)
-		self.screen.blit(self.opponent.image,self.opponent.rect)
-		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
+			#6 send a tick to every game object
+			for obj in self.gameObjectsList:
+				obj.tick()
+			for fr in self.fruits:
+				fr.tick()
+			self.scoreLabel.tick()
+			self.scoreLabelOpponent.tick()
+			self.youLabel.tick()
+			self.oppLabel.tick()
 			
-		
-		
+			#7 display game objects
+			self.screen.fill(self.black)
 
-		pygame.display.flip()
-		self.current_ticks+=1
-		return 0
+
+			self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
+			self.screen.blit(self.scoreLabelOpponent.label,self.scoreLabelOpponent.rect)
+			self.screen.blit(self.youLabel.label,self.youLabel.rect)
+			self.screen.blit(self.youLabel.label,self.youLabel.rect)
+
+
+
+			for fr in self.fruits:
+				self.screen.blit(fr.image,fr.rect)
+			for obj in self.gameObjectsList:
+				self.screen.blit(obj.image,obj.rect)
+			self.screen.blit(self.opponent.image,self.opponent.rect)
+			pygame.draw.line(self.screen,self.white,self.point1,self.point2)
+				
+			
+			
+
+			pygame.display.flip()
+			self.current_ticks+=1
+			return 0
 		
 	def updateOpponent(self,rect):
 		self.opponent.rect = rect
