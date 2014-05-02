@@ -17,10 +17,9 @@ class CommandConn(protocol.Protocol):
 		self.client = client
 	def sendMyData(self):
 		pd = pickle.dumps(self.gs.blender.rect)
-		#self.transport.write(str(self.playerNumber)+":"+'Rect:'+pd)
 		score = self.gs.score
-		print 'score is ',score
-		self.transport.write(str(self.playerNumber)+":"+'Score:'+str(score))
+		self.transport.write(str(self.playerNumber)+":"pd+':'+str(score))
+		
 
 	def connectionMade(self):
 		self.transport.write('connect')
@@ -39,17 +38,11 @@ class CommandConn(protocol.Protocol):
 			
 		else:
 				comp = data.split(':')
-				playerFrom = int(comp[0])
-				objType = comp[1]
-				obj = comp[2]
-				if objType == 'Rect':	
-					opponent = pickle.loads(obj)
-					self.gs.updateOpponent(opponent)
-				elif objType == 'Score':
-					opponentScore = int(obj)
-					print 'received ',opponentScore
-					self.gs.opponentScore = opponentScore
-
+				pd = comp[1]
+				opponent = pickle.loads(pd)
+				self.gs.updateOpponent(opponent)
+				oppScore = int(comp[2])
+				self.gs.opponentScore = opponentScore
 				self.sendMyData()
 		'''
 		elif data.startswith('Request'):
