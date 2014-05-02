@@ -1,9 +1,12 @@
 import pygame
+import random
+import sys
 from blender import Blender
 from fruit import Fruit
 from progressBar import ProgressBar
 from blackRect import BlackRect
 from scoreLabel import ScoreLabel
+from client import Client
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self):
@@ -24,6 +27,10 @@ class GameSpace:
 		
 		self.size = self.width, self.height = 1280,800
 		self.black = 0,0,0
+		self.white = 255,255,255
+		self.point1 = self.width/2,0
+		self.point2 = self.width/2,self.height
+
 		self.screen = pygame.display.set_mode(self.size)
 		self.current_ticks = 0
 		
@@ -39,6 +46,8 @@ class GameSpace:
 		#self.gameObjectsList.append(self.progressBar)
 		#self.gameObjectsList.append(self.blackRect)
 		
+		lc = LoopingCall(self.gameLoopIteration)
+		lc.start(1/60)
 		#start game loop
 		while 1:
 			#runs an iteration, returns 1 if they hit quit button
@@ -47,13 +56,26 @@ class GameSpace:
 
 	def gameLoopIteration(self):
 		#4) clock tick regulation
-		self.clock.tick(60) #frame rate
+		#self.clock.tick(60) #frame rate
 		if self.current_ticks%60 == 0:
-			fruit = Fruit(self,type='fruit')
+			randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
+			xpos = random.randint(0,self.width/2)
+			vspeed = random.randint(3,6)
+			fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+			xpos += self.width/2
+			fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 			self.fruits.append(fruit)
+			self.fruits.append(fruit2)
+
 		if self.current_ticks % 90 == 0:
-			veggie = Fruit(self,type='vegetable')
+			xpos = random.randint(0,self.width/2)
+			randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
+			vspeed = random.randint(3,6)
+			veggie = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+			xpos+=self.width/2
+			veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 			self.fruits.append(veggie)
+			self.fruits.append(veggie2)
 
 		#handle user inputs
 		for event in pygame.event.get():
@@ -80,6 +102,8 @@ class GameSpace:
 			self.screen.blit(fr.image,fr.rect)
 		for obj in self.gameObjectsList:
 			self.screen.blit(obj.image,obj.rect)
+		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
+			
 		
 		
 
@@ -109,5 +133,8 @@ class GameSpace:
 			
 		
 if __name__ == '__main__':
-	gs = GameSpace()
-	gs.main()
+	host = sys.argv[1]
+	port = int(sys.argv[2])
+	client = Client(host,port)
+	#gs = GameSpace()
+	#gs.main()
