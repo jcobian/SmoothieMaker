@@ -70,6 +70,8 @@ class GameSpace:
 		self.screen.fill(self.black)
 		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
 		self.screen.blit(winnerLabel.label,winnerLabel.rect)
+		pygame.display.flip()
+
 
 
 
