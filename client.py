@@ -5,12 +5,14 @@ class Client():
 	def __init__(self,host,port):
 		self.host = host
 		self.port = port
-		reactor.connectTCP(self.host,self.port,CommandConnFactory())
+		reactor.connectTCP(self.host,self.port,CommandConnFactory(self))
 		reactor.run()
 
+
 class CommandConn(protocol.Protocol):
-	def __init__(self):
+	def __init__(self,client):
 		self.numMessagesReceived = 0
+		self.client = client
 	def connectionMade(self):
 		self.transport.write('connect')
 	def dataReceived(self,data):
@@ -20,14 +22,22 @@ class CommandConn(protocol.Protocol):
 			comp = data.split(':')
 			playerNumber = int(comp[1])
 			print 'Game Started: You are Player',playerNumber
-			gs = GameSpace(playerNumber)
+			gs = GameSpace(self,playerNumber)
 			gs.main()
+			lc = LoopingCall(gs.gameLoopIteration)
+			lc.start(1/60)
+		elif data == 'Response:Blender':
+			pass
 
-		self.numMessagesReceived+=1
+	def getOpponentBlender(self):
+		self.transport.write('Request:Blender')
+
 
 class CommandConnFactory(protocol.ClientFactory):
+	def __init__(self,client):
+		self.client = client
 	def buildProtocol(self,addr):
-		return CommandConn()
+		return CommandConn(self.client)
 
 if __name__ == '__main__':
 	host = sys.argv[1]

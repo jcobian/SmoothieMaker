@@ -8,7 +8,8 @@ from blackRect import BlackRect
 from scoreLabel import ScoreLabel
 #main gamespace where the overarching game structure is
 class GameSpace:
-	def __init__(self,playerNumber):
+	def __init__(self,commandConn,playerNumber):
+		self.commandConn = commandConn
 		self.listOfFruitImages=['strawberry.png','banana.png']
 		self.listOfVegetableImages = ['potato.png']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png']
@@ -47,13 +48,12 @@ class GameSpace:
 		#self.gameObjectsList.append(self.progressBar)
 		#self.gameObjectsList.append(self.blackRect)
 		
-		#lc = LoopingCall(self.gameLoopIteration)
-		#lc.start(1/60)
+	
 		#start game loop
-		while 1:
+		#while 1:
 			#runs an iteration, returns 1 if they hit quit button
-			if self.gameLoopIteration():
-				return
+			#if self.gameLoopIteration():
+				#return
 
 	def gameLoopIteration(self):
 		#4) clock tick regulation
@@ -105,7 +105,7 @@ class GameSpace:
 		for obj in self.gameObjectsList:
 			self.screen.blit(obj.image,obj.rect)
 		#request a blender object from server then blit it on the screen here
-
+		#self.commandConn.getOpponentBlender()
 		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
 			
 		
