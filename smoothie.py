@@ -22,64 +22,70 @@ class GameSpace:
 		#so that key holds can be recognized.
 		pygame.key.set_repeat(17,17)	
 		
-		self.size = self.width, self.height = 900,900
+		self.size = self.width, self.height = 1000,800
 		self.black = 0,0,0
 		self.screen = pygame.display.set_mode(self.size)
 
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
-		self.blender = Blender(self,hspeed=5.0)
-		self.progressBar = ProgressBar(self)
-		self.blackRect = BlackRect(self)
+		self.blender = Blender(self,hspeed=7.0)
+		#self.progressBar = ProgressBar(self)
+		#self.blackRect = BlackRect(self)
 		self.scoreLabel = ScoreLabel(self)
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
 		#self.gameObjectsList.append(self.progressBar)
 		#self.gameObjectsList.append(self.blackRect)
-		
+		self.gameLoopIteration()
 		#start game loop
 		while 1:
-			#4) clock tick regulation
-			self.clock.tick(60) #frame rate
-			ticks = pygame.time.get_ticks()
-			if ticks%60 == 0:
-				fruit = Fruit(self,type='fruit')
-				self.fruits.append(fruit)
-			if ticks % 90 == 0:
-				veggie = Fruit(self,type='vegetable')
-				self.fruits.append(veggie)
+			#runs an iteration, returns 1 if they hit quit button
+			if self.gameLoopIteration():
+				return
+	def gameLoopIteration(self):
+		#4) clock tick regulation
+		self.clock.tick(60) #frame rate
+		ticks = pygame.time.get_ticks()
+		if ticks%60 == 0:
+			fruit = Fruit(self,type='fruit')
+			self.fruits.append(fruit)
+		if ticks % 90 == 0:
+			veggie = Fruit(self,type='vegetable')
+			self.fruits.append(veggie)
 
-			#handle user inputs
-			for event in pygame.event.get():
-				if event.type == pygame.KEYDOWN:
-					self.blender.move(event.key)
-				elif event.type == pygame.MOUSEBUTTONDOWN:
-					mx,my = pygame.mouse.get_pos()
-					self.freezeFruits(mx,my)
-				elif event.type == pygame.QUIT:
-					return	
+		#handle user inputs
+		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN:
+				self.blender.move(event.key)
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				mx,my = pygame.mouse.get_pos()
+				self.freezeFruits(mx,my)
+			elif event.type == pygame.QUIT:
+				return 1	
 
-			#6 send a tick to every game object
-			for obj in self.gameObjectsList:
-				obj.tick()
-			for fr in self.fruits:
-				fr.tick()
-			self.scoreLabel.tick()
-			
-			#7 display game objects
-			self.screen.fill(self.black)
+		#6 send a tick to every game object
+		for obj in self.gameObjectsList:
+			obj.tick()
+		for fr in self.fruits:
+			fr.tick()
+		self.scoreLabel.tick()
+		
+		#7 display game objects
+		self.screen.fill(self.black)
 
-			self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
-			for fr in self.fruits:
-				self.screen.blit(fr.image,fr.rect)
-			for obj in self.gameObjectsList:
-				self.screen.blit(obj.image,obj.rect)
-			
-			
+		self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
+		for fr in self.fruits:
+			self.screen.blit(fr.image,fr.rect)
+		for obj in self.gameObjectsList:
+			self.screen.blit(obj.image,obj.rect)
+		
+		
 
-			pygame.display.flip()
+		pygame.display.flip()
+		return 0
+		
 
 	def addToScore(self):
 		self.score+=10
