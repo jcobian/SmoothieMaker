@@ -126,7 +126,7 @@ class GameSpace:
 			self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
 			self.screen.blit(self.scoreLabelOpponent.label,self.scoreLabelOpponent.rect)
 			self.screen.blit(self.youLabel.label,self.youLabel.rect)
-			self.screen.blit(self.youLabel.label,self.youLabel.rect)
+			self.screen.blit(self.oppLabel.label,self.oppLabel.rect)
 
 
 
