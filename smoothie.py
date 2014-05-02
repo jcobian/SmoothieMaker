@@ -66,18 +66,18 @@ class GameSpace:
 		
 
 
-	def goToGameOver(self):
+	def goToGameOver(self,text):
 		self.screen.fill(self.black)
-		winnerLabel = PlayerLabel(self,textLabel="You Won!",xpos=self.width/2,ypos=self.height/2,size=50)
+		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
 		self.screen.blit(winnerLabel.label,winnerLabel.rect)
 
 
 
 	def gameLoopIteration(self):
 		if self.score >= self.winningScore:
-			self.goToGameOver('You')
+			self.goToGameOver('You Won')
 		elif self.opponentScore >= self.winningScore:
-			self.goToGameOver('Opponent')
+			self.goToGameOver('Opponent Won')
 		else:
 			if self.current_ticks%60 == 0:
 				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
