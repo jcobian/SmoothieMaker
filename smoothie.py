@@ -18,7 +18,14 @@ class GameSpace:
 		self.fruits = list()
 		self.score = 0
 		self.winningScore = 100 
-		self.opponent = None
+
+		self.size = self.width, self.height = 1280,800
+		self.black = 0,0,0
+		self.white = 255,255,255
+		self.point1 = self.width/2,0
+		self.point2 = self.width/2,self.height
+
+
 	def main(self):
 		#1) basic initialization
 		pygame.init()
@@ -26,11 +33,7 @@ class GameSpace:
 		#so that key holds can be recognized.
 		pygame.key.set_repeat(17,17)	
 		
-		self.size = self.width, self.height = 1280,800
-		self.black = 0,0,0
-		self.white = 255,255,255
-		self.point1 = self.width/2,0
-		self.point2 = self.width/2,self.height
+		
 
 		self.screen = pygame.display.set_mode(self.size)
 		self.current_ticks = 0
@@ -40,6 +43,12 @@ class GameSpace:
 		#get playernumber from server
 
 		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber)
+		opponentPlayerNumber = 1
+		if self.playerNumber == 1:
+			opponentPlayerNumber = 2
+
+		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber)
+
 		#self.progressBar = ProgressBar(self)
 		#self.blackRect = BlackRect(self)
 		self.scoreLabel = ScoreLabel(self)
@@ -118,8 +127,8 @@ class GameSpace:
 		self.current_ticks+=1
 		return 0
 		
-	def updateOpponent(self,opponent):
-		self.opponent = opponent
+	def updateOpponent(self,rect):
+		self.opponent.rect = rect
 	def addToScore(self):
 		self.score+=10
 		if self.score > self.winningScore:
