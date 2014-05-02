@@ -18,7 +18,7 @@ class CommandConn(protocol.Protocol):
 	def sendMyData(self):
 		pd = pickle.dumps(self.gs.blender.rect)
 		score = self.gs.score
-		self.transport.write(str(self.playerNumber)+":"pd+':'+str(score))
+		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score))
 		
 
 	def connectionMade(self):
