@@ -32,7 +32,7 @@ class CommandConn(protocol.Protocol):
 			comp = data.split(':')
 			requestType = comp[1]
 			if requestType == 'Blender':
-				pd = pickle.dumps(self.gs.blender)
+				pd = pickle.dumps(self.gs.blender,-1)
 				self.transport.write('Response:'+str(self.playerNumber)+':Blender:'+pd)
 		elif data.startswith('Response'):
 			comp = data.split(':')
