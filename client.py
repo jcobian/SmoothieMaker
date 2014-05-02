@@ -31,18 +31,19 @@ class CommandConn(protocol.Protocol):
 		elif data.startswith('Request'):
 			comp = data.split(':')
 			requestType = comp[1]
-			print requestType
 			if requestType == 'Blender':
+				print 'Received request for my blender'
 				pd = pickle.dumps(self.gs.blender.rect)
 				self.transport.write('Response:'+str(self.playerNumber)+':Blender:'+pd)
-				print 'Response:',str(self.playerNumber),':Blender:',pd
 		elif data.startswith('Response'):
 			comp = data.split(':')
 			responseType = comp[1]
 			if responseType == 'Blender':
+				print 'SUCCESS, UNPICKLING HERE'
 				pd = comp[2]
 				opponent = pickle.loads(pd)
-				gs.updateOpponent(opponent)
+				self.gs.updateOpponent(opponent)
+				sys.exit()
 
 	def getOpponentBlender(self):
 		self.transport.write('Request:'+str(self.playerNumber)+':Blender')

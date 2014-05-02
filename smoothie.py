@@ -114,8 +114,7 @@ class GameSpace:
 			self.screen.blit(fr.image,fr.rect)
 		for obj in self.gameObjectsList:
 			self.screen.blit(obj.image,obj.rect)
-		if self.opponent is not None:
-			self.screen.blit(self.opponent.image,self.opponent.rect)
+		self.screen.blit(self.opponent.image,self.opponent.rect)
 		#request a blender object from server then blit it on the screen here
 		self.commandConn.getOpponentBlender()
 		pygame.draw.line(self.screen,self.white,self.point1,self.point2)
