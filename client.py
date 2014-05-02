@@ -1,4 +1,5 @@
 from twisted.internet import protocol,reactor
+from smoothie import GameSpace
 import sys
 class Client():
 	def __init__(self,host,port):
