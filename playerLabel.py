@@ -1,6 +1,6 @@
 import pygame
 class PlayerLabel(pygame.sprite.Sprite):
-	def __init__(self, gs=None, textLabel, xpos, ypos, size):
+	def __init__(self, gs=None, textLabel="", xpos=0, ypos=0, size=0):
 			pygame.sprite.Sprite.__init__(self)
 			self.gs = gs
 			self.white = 255,255,255
@@ -9,4 +9,4 @@ class PlayerLabel(pygame.sprite.Sprite):
 			self.rect.center = (xpos, ypos)
 			
 	def tick(self):
-		pass		
+		pass
