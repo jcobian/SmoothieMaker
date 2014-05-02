@@ -35,7 +35,8 @@ class GameSpace:
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
 		self.gameObjectsList.append(self.progressBar)
-		#self.gameObjectsList.append(self.blackRect)
+		self.gameObjectsList.append(self.blackRect)
+		
 		#start game loop
 		while 1:
 			#4) clock tick regulation
