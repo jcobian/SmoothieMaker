@@ -11,10 +11,9 @@ class CommandConn(protocol.Protocol):
 	def __init__(self):
 		pass
 	def connectionMade(self):
-		print 'yay'
-		self.transport.write('connection made')
+		self.transport.write('give me a player number')
 	def dataReceived(self,data):
-		print ' got data'
+		print data
 
 class CommandConnFactory(protocol.ClientFactory):
 	def buildProtocol(self,addr):
