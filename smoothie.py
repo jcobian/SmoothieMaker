@@ -3,6 +3,7 @@ from blender import Blender
 from fruit import Fruit
 from progressBar import ProgressBar
 from blackRect import BlackRect
+from scoreLabel import ScoreLabel
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self):
@@ -31,11 +32,12 @@ class GameSpace:
 		self.blender = Blender(self,hspeed=5.0)
 		self.progressBar = ProgressBar(self)
 		self.blackRect = BlackRect(self)
+		self.scoreLabel = ScoreLabel(self)
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
-		self.gameObjectsList.append(self.progressBar)
-		self.gameObjectsList.append(self.blackRect)
+		#self.gameObjectsList.append(self.progressBar)
+		#self.gameObjectsList.append(self.blackRect)
 		
 		#start game loop
 		while 1:
@@ -56,8 +58,6 @@ class GameSpace:
 				elif event.type == pygame.MOUSEBUTTONDOWN:
 					mx,my = pygame.mouse.get_pos()
 					self.freezeFruits(mx,my)
-					
-
 				elif event.type == pygame.QUIT:
 					return	
 
@@ -66,9 +66,12 @@ class GameSpace:
 				obj.tick()
 			for fr in self.fruits:
 				fr.tick()
+			self.scoreLabel.tick()
 			
 			#7 display game objects
 			self.screen.fill(self.black)
+
+			self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
 			for fr in self.fruits:
 				self.screen.blit(fr.image,fr.rect)
 			for obj in self.gameObjectsList:
