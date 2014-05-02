@@ -58,8 +58,7 @@ class CommandConn(protocol.Protocol):
 				sys.exit()
 		'''
 
-	def getOpponentBlender(self):
-		self.transport.write('Request:'+str(self.playerNumber)+':Blender')
+	
 
 
 class CommandConnFactory(protocol.ClientFactory):
