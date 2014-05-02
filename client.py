@@ -29,13 +29,14 @@ class CommandConn(protocol.Protocol):
 			lc = LoopingCall(self.gs.gameLoopIteration)
 			lc.start(1/60)
 			pd = pickle.dumps(self.gs.blender.rect)
-			self.transport.write(self.playerNumber+":"+pd)
+			self.transport.write(str(self.playerNumber)+":"+pd)
 		else:
+				print 'got a pickle!'
 				pd = data
 				opponent = pickle.loads(pd)
 				self.gs.updateOpponent(opponent)
 				pd = pickle.dumps(self.gs.blender.rect)
-				self.transport.write(self.playerNumber+":"+pd)
+				self.transport.write(str(self.playerNumber)+":"+pd)
 		'''
 		elif data.startswith('Request'):
 			comp = data.split(':')
