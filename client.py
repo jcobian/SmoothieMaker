@@ -26,7 +26,7 @@ class CommandConn(protocol.Protocol):
 		if valid == 1:
 			self.gs.shouldSendData = 0
 		print 'send',foodType
-		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+'fruit')
+		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+'fruit')
 		'''
 		myFruits = self.gs.fruits
 		oppFruits = self.gs.fruitsOpp
