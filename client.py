@@ -18,7 +18,7 @@ class CommandConn(protocol.Protocol):
 	def sendMyData(self):
 		pd = pickle.dumps(self.gs.blender.rect)
 		score = self.gs.score
-		'''
+		
 		myFruits = self.gs.fruits
 		oppFruits = self.gs.fruitsOpp
 		myDict = dict()
@@ -45,9 +45,7 @@ class CommandConn(protocol.Protocol):
 
 		myDict['fruits'] = oppFruitList
 		pickleDict = pickle.dumps(myDict)
-		'''
-
-		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score))
+		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score)+':'+pickleDict)
 		
 	def closeConn(self):
 		reactor.stop()
@@ -79,12 +77,11 @@ class CommandConn(protocol.Protocol):
 		self.gs.updateOpponent(opponent)
 		oppScore = int(comp[2])
 		self.gs.opponentScore = oppScore
-		'''
 		pickleDict = comp[3]
 		myDict = pickle.loads(pickleDict)
 		self.gs.updateMyFruits(myDict['fruits'])
 		self.gs.updateOppFruits(myDict['oppFruits'])
-		'''
+		
 
 
 	

@@ -92,6 +92,7 @@ class GameSpace:
 				xpos = random.randint(0,self.width/2)
 				vspeed = random.randint(3,6)
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				print fruit.rect.top
 				xpos += self.width/2
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(fruit)
@@ -180,11 +181,14 @@ class GameSpace:
 			imageName = fd['image']
 			frozen = fd['frozen']
 			rect = pickle.loads(fd['rect'])
+			print rect.top
 			vspeed = fd['vspeed']
 			currentTicks = fd['currentTicks']
 			fruit = Fruit(gs=self)
 			fruit.updateFruit(imageName,frozen,rect,vspeed,currentTicks)
 			self.fruitsOpp.append(fruit)
+			self.commandConn.lc.stop()
+			self.commandConn.closeConn()
 
 
 	def updateOpponent(self,rect):
