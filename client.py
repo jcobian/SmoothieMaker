@@ -55,6 +55,9 @@ class CommandConn(protocol.Protocol):
 	def dataReceived(self,data):
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
+		elif data == 'player quit':
+			print 'Your opponent quit, sorry'
+			sys.exit()
 		elif data.startswith('PN'):
 			comp = data.split(':')
 			self.playerNumber = int(comp[1])
