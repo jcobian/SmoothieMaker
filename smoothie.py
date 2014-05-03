@@ -88,20 +88,27 @@ class GameSpace:
 			self.goToGameOver('Opponent Won')
 		else:
 			if self.current_ticks%120 == 0:
+				self.foodType = 'fruit'
 				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
+				self.randFruitInt = randFruitInt
 				xpos = random.randint(0,self.width/2)
+				self.randXPos = xpos
 				vspeed = random.randint(3,6)
+				self.randVSpeed = vspeed
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-				print 'created',fruit.rect.top
 				xpos += self.width/2
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(fruit)
 				self.fruitsOpp.append(fruit2)
 
 			if self.current_ticks % 180 == 0:
+				self.foodType = 'vegetable'
 				xpos = random.randint(0,self.width/2)
+				self.xpos = xpos
 				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
+				self.randFruitInt = randFruitInt
 				vspeed = random.randint(3,6)
+				self.randVSpeed = vspeed
 				veggie = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				xpos+=self.width/2
 				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
@@ -163,7 +170,13 @@ class GameSpace:
 			return 0
 		
 
-
+	def addFruit(self,fruitInt,xpos,vspeed,foodType):
+		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
+		xpos+=self.width/2
+		food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
+		self.fruits.append(food)
+		self.fruitsOpp.append(food2)
+	'''
 	def updateMyFruits(self,fruitsList):
 		del self.fruits[:]
 		for fd in fruitsList:
@@ -188,6 +201,7 @@ class GameSpace:
 			fruit.updateFruit(imageName,frozen,rect,vspeed,currentTicks)
 			self.fruitsOpp.append(fruit)
 			self.commandConn.closeConn()
+	'''
 
 
 	def updateOpponent(self,rect):
