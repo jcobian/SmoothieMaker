@@ -27,7 +27,8 @@ class CommandConn(protocol.Protocol):
 			self.gs.shouldSendData = 0
 		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType+'end'
 		comp = theString.split(':')
-		self.transport.write(theString)
+		if valid == 1:
+			self.transport.write(theString)
 		
 		
 	def closeConn(self):
@@ -65,6 +66,7 @@ class CommandConn(protocol.Protocol):
 				oppScore = int(comp[2])
 				self.gs.opponentScore = oppScore
 				valid = int(comp[3])
+				print 'valid is ',valid
 				if valid == 1:
 					fruitInt = int(comp[4])
 					xpos = int(comp[5])
