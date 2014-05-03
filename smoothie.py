@@ -169,7 +169,6 @@ class GameSpace:
 			
 
 			pygame.display.flip()
-			self.
 			self.current_ticks+=1
 			return 0
 		
