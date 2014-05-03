@@ -100,9 +100,9 @@ class BlenderConn(protocol.Protocol):
 	def dataReceived(self,data):
 		if data == 'lost conn':
 			print 'Connection was lost, sorry'
-			reactor.stop()
-		self.parseData(data)
-		self.sendMyData()
+		else:
+			self.parseData(data)
+			self.sendMyData()
 
 	def parseData(self,data):
 		comp = data.split(':')
