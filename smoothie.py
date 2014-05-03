@@ -117,7 +117,7 @@ class GameSpace:
 				elif event.type == pygame.QUIT:
 					pygame.display.quit()
 					self.commandConn.lc.stop()
-					self.commandConn.transport.write('player quit')
+					#self.commandConn.transport.write('player quit')
 					self.commandConn.closeConn()
 					return 1
 
