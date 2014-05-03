@@ -171,6 +171,7 @@ class GameSpace:
 		
 
 	def addFruit(self,fruitInt,xpos,vspeed,foodType):
+		print foodType
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
 		xpos+=self.width/2
 		food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
