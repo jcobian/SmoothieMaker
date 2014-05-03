@@ -102,7 +102,9 @@ class CommandConn(protocol.Protocol):
 		self.gs.updateOppFruits(myDict['oppFruits'])
 		'''
 		
-
+	def gameOver(self,text):
+		self.lc = LoopingCall(self.gs.goToGameOver,(text))
+		self.lc.start(1/60)
 
 	
 

@@ -74,6 +74,16 @@ class GameSpace:
 	def goToGameOver(self,text):
 		self.screen.fill(self.black)
 		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
+
+
+		#handle user inputs
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.display.quit()
+				self.commandConn.lc.stop()
+				self.commandConn.closeConn()
+				return 1
+
 		self.screen.blit(winnerLabel.label,winnerLabel.rect)
 		pygame.display.flip()
 
@@ -81,12 +91,14 @@ class GameSpace:
 
 
 	def gameLoopIteration(self):
-		if self.quitGame == True:
-			return 1
 		if self.score >= self.winningScore:
-			self.goToGameOver('You Won')
+			self.commandConn.lc.stop()
+			self.commandConn.gameOver('You Won')
+			return 0
 		elif self.opponentScore >= self.winningScore:
-			self.goToGameOver('Opponent Won')
+			self.commandConn.lc.stop()
+			self.commandConn.gameOver('Opponent Won')
+			return 0
 		else:
 			if self.current_ticks%120 == 0:
 				self.shouldSendData = 1
@@ -102,8 +114,9 @@ class GameSpace:
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(fruit)
 				self.fruitsOpp.append(fruit2)
-			'''
+			
 			if self.current_ticks % 180 == 0:
+				self.shouldSendData = 1
 				self.foodType = 'vegetable'
 				xpos = random.randint(0,self.width/2)
 				self.xpos = xpos
@@ -116,7 +129,7 @@ class GameSpace:
 				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(veggie)
 				self.fruitsOpp.append(veggie2)
-			'''
+			
 		
 			#handle user inputs
 			for event in pygame.event.get():
@@ -174,7 +187,6 @@ class GameSpace:
 		
 
 	def addFruit(self,fruitInt,xpos,vspeed,foodType):
-		print 'add',foodType
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
 		xpos+=self.width/2
 		food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
