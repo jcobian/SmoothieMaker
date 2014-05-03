@@ -1,11 +1,13 @@
 import pygame
 import random
 class Fruit(pygame.sprite.Sprite):
-	def __init__(self,gs=None,type='fruit',xpos= 0,randFruitInt=0,vspeed=3):
+	def __init__(self,gs=None,type='fruit',xpos= 0,randFruitInt=0,vspeed=3,fruitID=0,side='left'):
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
 		self.type = type
 		self.frozen = False
+		self.fruitID = fruitID
+		self.side = side
 		#load a random image
 		self.randFruitInt = randFruitInt
 		if self.type == 'fruit':
@@ -39,6 +41,22 @@ class Fruit(pygame.sprite.Sprite):
 
 	#on each tick, move down the screen if you're not frozen
 	def tick(self):
+		if self.start == True:
+			self.doTheTick()
+		else:
+			otherList = list()
+			if self.side == 'left':
+				otherList = self.gs.fruitsOpp
+			else:
+				otherList = self.gs.fruits
+
+			for fr in otherList:
+				if fr.fruitID == self.fruitID:
+					self.start = True
+					self.doTheTick()
+					break
+
+	def doTheTick(self):
 		if self.frozen == False:
 			self.rect = self.rect.move(0,self.vspeed)
 			if self.rect.top >= self.gs.height:

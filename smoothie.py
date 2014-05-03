@@ -113,8 +113,9 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
+				self.fruitID = len(self.fruits)
+				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
+				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType,self.fruitID)
 				self.commandConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
 			elif self.current_ticks %180 == 0:
@@ -125,8 +126,9 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
+				self.fruitID = len(self.fruits)
+				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
+				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType,self.fruitID)
 				self.commandConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
 
@@ -187,9 +189,9 @@ class GameSpace:
 			return 0
 		
 
-	def addFruit(self,fruitInt,xpos,vspeed,foodType):
+	def addFruit(self,fruitInt,xpos,vspeed,foodType,iD):
 		xpos+=self.width/2
-		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
+		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed,fruitID=iD,side='right')
 		self.fruitsOpp.append(food)
 
 
