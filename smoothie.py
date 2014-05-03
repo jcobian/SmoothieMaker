@@ -18,8 +18,10 @@ class GameSpace:
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png']
 		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png']
 		self.playerNumber = playerNumber
+
 		self.fruits = list()
 		self.fruitsOpp = list()
+
 		self.score = 0
 		self.opponentScore = 0
 		self.winningScore = 100 
@@ -112,12 +114,8 @@ class GameSpace:
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
 				self.commandConn.fruitQueue.put(fruitData)
-				xpos += self.width/2
-				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
 				self.fruits.append(fruit)
-				#self.fruitsOpp.append(fruit2)
-				self.shouldSendData = 1
 
 			'''
 			if self.current_ticks % 180 == 0:
@@ -195,35 +193,11 @@ class GameSpace:
 		
 
 	def addFruit(self,fruitInt,xpos,vspeed,foodType):
+		print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
 		xpos+=self.width/2
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
 		self.fruitsOpp.append(food)
-	'''
-	def updateMyFruits(self,fruitsList):
-		del self.fruits[:]
-		for fd in fruitsList:
-			imageName = fd['image']
-			frozen = fd['frozen']
-			rect = pickle.loads(fd['rect'])
-			vspeed = fd['vspeed']
-			currentTicks = fd['currentTicks']
-			fruit = Fruit(gs=self)
-			fruit.updateFruit(imageName,frozen,rect,vspeed,currentTicks)
-			self.fruits.append(fruit)
-	def updateOppFruits(self,fruitsList):
-		del self.fruitsOpp[:]
-		for fd in fruitsList:
-			imageName = fd['image']
-			frozen = fd['frozen']
-			rect = pickle.loads(fd['rect'])
-			print 'in update',rect.top
-			vspeed = fd['vspeed']
-			currentTicks = fd['currentTicks']
-			fruit = Fruit(gs=self)
-			fruit.updateFruit(imageName,frozen,rect,vspeed,currentTicks)
-			self.fruitsOpp.append(fruit)
-			self.commandConn.closeConn()
-	'''
+
 
 
 	def updateOpponent(self,rect):
