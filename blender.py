@@ -33,33 +33,35 @@ class Blender(pygame.sprite.Sprite):
 
 			self.hspeed = hspeed
 	def tick(self):
-		fruitRects = list()
-		for fruit in self.gs.fruits:
-			fruitRects.append(fruit.rect)
-		#indicies = self.colliderect.collidelistall(self.gs.fruits)
-		indicies = self.colliderect.collidelistall(fruitRects)
-		for index in indicies:
-			food = self.gs.fruits[index]
-			self.gs.fruits.pop(index)
+		if self.playerType == 'user':
+			fruitRects = list()
+			for fruit in self.gs.fruits:
+				fruitRects.append(fruit.rect)
+			#indicies = self.colliderect.collidelistall(self.gs.fruits)
+			indicies = self.colliderect.collidelistall(fruitRects)
+			for index in indicies:
+				food = self.gs.fruits[index]
+				self.gs.fruits.pop(index)
 
-			if food.type == 'fruit':
-				self.gs.addToScore()
-			elif food.type == 'vegetable':
-				self.gs.subFromScore()
-
-
-		fruitRects = list()
-		for fruit in self.gs.fruitsOpp:
-			fruitRects.append(fruit.rect)
-		#indicies = self.colliderect.collidelistall(self.gs.fruits)
-		indicies = self.colliderect.collidelistall(fruitRects)
-		for index in indicies:
-			food = self.gs.fruitsOpp[index]
-			self.gs.fruitsOpp.pop(index)
-			if food.type == 'fruit':
-				self.gs.addToScore()
-			elif food.type == 'vegetable':
-				self.gs.subFromScore()
+				if food.type == 'fruit':
+					self.gs.addToScore()
+				elif food.type == 'vegetable':
+					self.gs.subFromScore()
+		else:
+			fruitRects = list()
+			for fruit in self.gs.fruitsOpp:
+				#print 'got here'
+				fruitRects.append(fruit.rect)
+			#indicies = self.colliderect.collidelistall(self.gs.fruits)
+			indicies = self.colliderect.collidelistall(fruitRects)
+			#print 'here: ',len(indicies)
+			for index in indicies:
+				food = self.gs.fruitsOpp[index]
+				self.gs.fruitsOpp.pop(index)
+				if food.type == 'fruit':
+					self.gs.addToScore()
+				elif food.type == 'vegetable':
+					self.gs.subFromScore()
 
 
 

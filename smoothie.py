@@ -70,6 +70,7 @@ class GameSpace:
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
+		self.gameObjectsList.append(self.opponent)
 
 		self.quitGame = False
 		
