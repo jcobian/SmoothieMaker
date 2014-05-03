@@ -63,6 +63,8 @@ class GameSpace:
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
+
+		self.quitGame = False
 		
 
 
@@ -76,6 +78,8 @@ class GameSpace:
 
 
 	def gameLoopIteration(self):
+		if self.quitGame == True:
+			return 1
 		if self.score >= self.winningScore:
 			self.goToGameOver('You Won')
 		elif self.opponentScore >= self.winningScore:
@@ -109,7 +113,9 @@ class GameSpace:
 					mx,my = pygame.mouse.get_pos()
 					self.freezeFruits(mx,my)
 				elif event.type == pygame.QUIT:
-					return 1	
+					pygame.display.quit()
+					self.quitGame = True
+					return 1
 
 			#6 send a tick to every game object
 			for obj in self.gameObjectsList:
