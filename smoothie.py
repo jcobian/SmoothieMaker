@@ -73,7 +73,7 @@ class GameSpace:
 		self.gameObjectsList.append(self.opponent)
 
 		self.quitGame = False
-		
+		self.counter = 0
 
 
 	def goToGameOver(self,text):
@@ -113,7 +113,8 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				self.fruitID = len(self.fruits)
+				self.fruitID = self.counter
+				self.counter+=1
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType,self.fruitID)
 				self.commandConn.fruitQueue.put(fruitData)
@@ -126,7 +127,8 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				self.fruitID = len(self.fruits)
+				self.fruitID = self.counter
+				self.counter+=1
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType,self.fruitID)
 				self.commandConn.fruitQueue.put(fruitData)

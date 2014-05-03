@@ -48,7 +48,6 @@ class Blender(pygame.sprite.Sprite):
 				elif food.type == 'vegetable':
 					self.gs.subFromScore()
 		else:
-			print 'type is ',self.playerType
 			fruitRects = list()
 			for fruit in self.gs.fruitsOpp:
 				#print 'got here'
