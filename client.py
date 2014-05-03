@@ -55,8 +55,8 @@ class CommandConn(protocol.Protocol):
 	def dataReceived(self,data):
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
-		elif data == 'player quit':
-			print 'Your opponent quit, sorry'
+		elif data == 'lost conn':
+			print 'Your opponent lost their connection, sorry'
 			reactor.stop()
 		elif data.startswith('PN'):
 			comp = data.split(':')
