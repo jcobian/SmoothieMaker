@@ -23,6 +23,7 @@ class CommandConn(protocol.Protocol):
 		foodType = self.gs.foodType
 		randVSpeed = self.gs.randVSpeed
 		valid = self.gs.shouldSendData
+		print 'send valid is ',valid
 		if valid == 1:
 			self.gs.shouldSendData = 0
 		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType+'end'
@@ -59,22 +60,22 @@ class CommandConn(protocol.Protocol):
 		for piece in splitUp:
 			if len(piece)==0:
 				continue
-				comp = piece.split(':')
-				pd = comp[1]
-				opponent = pickle.loads(pd)
-				self.gs.updateOpponent(opponent)
-				oppScore = int(comp[2])
-				self.gs.opponentScore = oppScore
-				valid = int(comp[3])
-				print 'valid is ',valid
-				if valid == 1:
-					fruitInt = int(comp[4])
-					xpos = int(comp[5])
-					vspeed = int(comp[6])
-					foodType = comp[7]
-					print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
-					self.closeConn()
-					self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
+			comp = piece.split(':')
+			pd = comp[1]
+			opponent = pickle.loads(pd)
+			self.gs.updateOpponent(opponent)
+			oppScore = int(comp[2])
+			self.gs.opponentScore = oppScore
+			valid = int(comp[3])
+			print 'valid is ',valid
+			if valid == 1:
+				fruitInt = int(comp[4])
+				xpos = int(comp[5])
+				vspeed = int(comp[6])
+				foodType = comp[7]
+				print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
+				self.closeConn()
+				self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
 
 			 
 		
