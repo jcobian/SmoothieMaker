@@ -49,7 +49,8 @@ class CommandConn(protocol.Protocol):
 
 		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score))
 		
-
+	def closeConn(self):
+		reactor.stop()
 	def connectionMade(self):
 		self.transport.write('connect')
 	def dataReceived(self,data):
@@ -58,14 +59,17 @@ class CommandConn(protocol.Protocol):
 		elif data == 'lost conn':
 			print 'Your opponent lost their connection, sorry'
 			reactor.stop()
+		elif data == 'player quit':
+			print 'Your opponent quit the game, sorry'
+			reactor.stop()
 		elif data.startswith('PN'):
 			comp = data.split(':')
 			self.playerNumber = int(comp[1])
 			print 'Game Started: You are Player',self.playerNumber
 			self.gs = GameSpace(self,self.playerNumber)
 			self.gs.main()
-			lc = LoopingCall(self.gs.gameLoopIteration)
-			lc.start(1/60)
+			self.lc = LoopingCall(self.gs.gameLoopIteration)
+			self.lc.start(1/60)
 			self.sendMyData()
 			
 		else:

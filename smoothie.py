@@ -116,7 +116,9 @@ class GameSpace:
 					self.freezeFruits(mx,my)
 				elif event.type == pygame.QUIT:
 					pygame.display.quit()
-					self.quitGame = True
+					self.commandConn.lc.stop()
+					self.commandConn.transport.write('player quit')
+					self.commandConn.closeConn()
 					return 1
 
 			#6 send a tick to every game object
