@@ -28,10 +28,10 @@ class CommandConn(protocol.Protocol):
 			tempDict['frozen'] = fruit.frozen
 			tempDict['rect'] = pickle.dumps(fruit.rect)
 			tempDict['vspeed'] = fruit.vspeed
-			tempDict['currentTicks'] = fruit.currentTicks
+			tempDict['currentTicks'] = fruit.current_tick
 			fruitList.append(tempDict)
 		myDict['oppFruits'] = fruitList
-		
+
 		oppFruitList = list()
 		for fruit in oppFruits:
 			tempDict = dict()
@@ -39,7 +39,7 @@ class CommandConn(protocol.Protocol):
 			tempDict['frozen'] = fruit.frozen
 			tempDict['rect'] = pickle.dumps(fruit.rect)
 			tempDict['vspeed'] = fruit.vspeed
-			tempDict['currentTicks'] = fruit.currentTicks
+			tempDict['currentTicks'] = fruit.current_tick
 			oppFruitList.append(tempDict)
 
 		myDict['fruits'] = oppFruitList
