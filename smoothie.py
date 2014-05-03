@@ -197,6 +197,8 @@ class GameSpace:
 	def updateOpponent(self,rect):
 		self.opponent.rect = rect
 		self.opponent.rect = self.opponent.rect.move(self.width/2,0)
+		self.opponent.colliderect = self.opponent.rect.inflate(-self.opponent.rect.width*.18,-self.opponent.rect.height*.9)
+		self.opponent.colliderect = self.opponent.colliderect.move((-self.opponent.rect.width*.18)/2,(-self.opponent.rect.height*.9)/2)
 	def addToScore(self):
 		self.score+=10
 		if self.score > self.winningScore:

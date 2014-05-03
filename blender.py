@@ -48,12 +48,15 @@ class Blender(pygame.sprite.Sprite):
 				elif food.type == 'vegetable':
 					self.gs.subFromScore()
 		else:
+			print 'type is ',self.playerType
 			fruitRects = list()
 			for fruit in self.gs.fruitsOpp:
 				#print 'got here'
+				print 'added fruit to rects'
 				fruitRects.append(fruit.rect)
 			#indicies = self.colliderect.collidelistall(self.gs.fruits)
 			indicies = self.colliderect.collidelistall(fruitRects)
+			print 'collided w/ ',len(indicies)
 			#print 'here: ',len(indicies)
 			for index in indicies:
 				food = self.gs.fruitsOpp[index]
