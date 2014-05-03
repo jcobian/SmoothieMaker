@@ -50,13 +50,9 @@ class Blender(pygame.sprite.Sprite):
 		else:
 			fruitRects = list()
 			for fruit in self.gs.fruitsOpp:
-				#print 'got here'
 				fruitRects.append(fruit.rect)
-			#indicies = self.colliderect.collidelistall(self.gs.fruits)
 			indicies = self.colliderect.collidelistall(fruitRects)
-			#print 'here: ',len(indicies)
 			for index in indicies:
-				food = self.gs.fruitsOpp[index]
 				self.gs.fruitsOpp.pop(index)
 				
 
