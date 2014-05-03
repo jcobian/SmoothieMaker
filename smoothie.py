@@ -116,7 +116,7 @@ class GameSpace:
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
 				self.fruits.append(fruit)
-				self.fruitsOpp.append(fruit2)
+				#self.fruitsOpp.append(fruit2)
 				self.shouldSendData = 1
 
 			'''
@@ -195,11 +195,9 @@ class GameSpace:
 		
 
 	def addFruit(self,fruitInt,xpos,vspeed,foodType):
-		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
 		xpos+=self.width/2
-		food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
-		self.fruits.append(food)
-		self.fruitsOpp.append(food2)
+		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
+		self.fruitsOpp.append(food)
 	'''
 	def updateMyFruits(self,fruitsList):
 		del self.fruits[:]
