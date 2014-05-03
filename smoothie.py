@@ -12,9 +12,9 @@ class GameSpace:
 	def __init__(self,commandConn,playerNumber):
 		self.commandConn = commandConn
 		self.listOfFruitImages=['strawberry.png','banana.png']
-		self.listOfVegetableImages = ['potato.png']
+		self.listOfVegetableImages = ['potato.png', 'onion.jpg']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png']
-		self.listOfFrozenVegetableImages = ['potatofrozen.png']
+		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.jpg']
 		self.playerNumber = playerNumber
 		self.fruits = list()
 		self.score = 0
