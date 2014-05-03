@@ -50,9 +50,10 @@ class FruitConn(protocol.Protocol):
 		elif data.startswith('PN'):
 			comp = data.split(':')
 			self.playerNumber = int(comp[1])
+			self.randSeed = int(comp[2])
 			self.client.blenderConn.playerNumber = self.playerNumber
 			print 'Game Started: You are Player',self.playerNumber
-			self.gs = GameSpace(self,self.playerNumber)
+			self.gs = GameSpace(self,self.playerNumber,self.randSeed)
 			self.client.blenderConn.gs = self.gs
 			self.gs.main()
 			self.lc = LoopingCall(self.gs.gameLoopIteration)

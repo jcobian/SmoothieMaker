@@ -11,7 +11,7 @@ from playerLabel import PlayerLabel
 from fruitdata import FruitData
 #main gamespace where the overarching game structure is
 class GameSpace:
-	def __init__(self,commandConn,playerNumber):
+	def __init__(self,commandConn,playerNumber,randSeed):
 		self.commandConn = commandConn
 		self.listOfFruitImages=['strawberry.png','banana.png']
 		self.listOfVegetableImages = ['potato.png', 'onion.png']
@@ -32,6 +32,8 @@ class GameSpace:
 		self.point1 = self.width/2,0
 		self.point2 = self.width/2,self.height
 		self.gameIsOver = False
+
+		random.seed(randSeed)
 
 
 	def main(self):
@@ -194,8 +196,8 @@ class GameSpace:
 
 	def addFruit(self,fruitInt,xpos,vspeed,foodType):
 		print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
-		food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
-		self.fruits.append(food2)
+		#food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
+		#self.fruits.append(food2)
 		xpos+=self.width/2
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
 		self.fruitsOpp.append(food)
