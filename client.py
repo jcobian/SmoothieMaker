@@ -55,20 +55,27 @@ class CommandConn(protocol.Protocol):
 			self.parseData(data)
 			self.sendMyData()
 	def parseData(self,data):
-		comp = data.split(':')
-		print 'receive comp',comp
-		pd = comp[1]
-		opponent = pickle.loads(pd)
-		self.gs.updateOpponent(opponent)
-		oppScore = int(comp[2])
-		self.gs.opponentScore = oppScore
-		valid = int(comp[3])
-		if valid == 1:
-			fruitInt = int(comp[4])
-			xpos = int(comp[5])
-			vspeed = int(comp[6])
-			foodType = comp[7]
-			self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
+		splitUp = data.split('end')
+		for piece in splitUp:
+			if len(piece)==0:
+				continue
+
+				comp = piece.split(':')
+				print 'receive comp',comp
+				pd = comp[1]
+				opponent = pickle.loads(pd)
+				self.gs.updateOpponent(opponent)
+				oppScore = int(comp[2])
+				self.gs.opponentScore = oppScore
+				valid = int(comp[3])
+				if valid == 1:
+					fruitInt = int(comp[4])
+					xpos = int(comp[5])
+					vspeed = int(comp[6])
+					foodType = comp[7]
+					self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
+
+			 
 		
 		
 	def gameOver(self,text):
