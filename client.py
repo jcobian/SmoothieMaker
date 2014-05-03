@@ -45,7 +45,7 @@ class FruitConn(protocol.Protocol):
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
 		elif data == 'lost conn':
-			print 'Your opponent lost their connection, sorry'
+			print 'Connection was lost, sorry'
 			reactor.stop()
 		elif data.startswith('PN'):
 			comp = data.split(':')
@@ -98,6 +98,9 @@ class BlenderConn(protocol.Protocol):
 		reactor.stop()
 
 	def dataReceived(self,data):
+		if data == 'lost conn':
+			print 'Connection was lost, sorry'
+			reactor.stop()
 		self.parseData(data)
 		self.sendMyData()
 
