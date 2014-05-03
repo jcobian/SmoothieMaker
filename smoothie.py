@@ -116,7 +116,6 @@ class GameSpace:
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
 				self.commandConn.fruitQueue.put(fruitData)
-				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
 				self.fruits.append(fruit)
 
 			'''
@@ -195,9 +194,6 @@ class GameSpace:
 		
 
 	def addFruit(self,fruitInt,xpos,vspeed,foodType):
-		print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
-		#food2 = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
-		#self.fruits.append(food2)
 		xpos+=self.width/2
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed)
 		self.fruitsOpp.append(food)
