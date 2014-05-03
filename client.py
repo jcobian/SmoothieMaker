@@ -53,6 +53,7 @@ class FruitConn(protocol.Protocol):
 			self.client.blenderConn.playerNumber = self.playerNumber
 			print 'Game Started: You are Player',self.playerNumber
 			self.gs = GameSpace(self,self.playerNumber)
+			self.client.blenderConn.gs = self.gs
 			self.gs.main()
 			self.lc = LoopingCall(self.gs.gameLoopIteration)
 			self.lc.start(1/60)
@@ -81,6 +82,7 @@ class BlenderConn(protocol.Protocol):
 	def __init__(self,client):
 		self.client = client
 		self.playerNumber = 0
+		self.gs = None
 
 	def connectionMade(self):
 		self.client.blenderConn = self
