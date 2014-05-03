@@ -110,7 +110,7 @@ class GameSpace:
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-				fruitData = FruitData(self.randFruitInt,self.xpos,self.vspeed,self.foodType)
+				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
 				self.commandConn.fruitQueue.put(fruitData)
 				xpos += self.width/2
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
