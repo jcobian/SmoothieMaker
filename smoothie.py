@@ -113,7 +113,19 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				fruit = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
+				self.commandConn.fruitQueue.put(fruitData)
+				self.fruits.append(fruit)
+			elif self.current_ticks %180 == 0:
+				self.foodType = 'vegetable'
+				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
+				self.randFruitInt = randFruitInt
+				xpos = random.randint(0,self.width/2)
+				self.randXPos = xpos
+				vspeed = random.randint(3,6)
+				self.randVSpeed = vspeed
+				fruit = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
 				self.commandConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruit)
