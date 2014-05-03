@@ -63,11 +63,11 @@ class CommandConn(protocol.Protocol):
 			self.gs.main()
 			lc = LoopingCall(self.gs.gameLoopIteration)
 			lc.start(1/60)
-			#self.sendMyData()
+			self.sendMyData()
 			
 		else:
 			self.parseData(data)
-			#self.sendMyData()
+			self.sendMyData()
 	def parseData(self,data):
 		comp = data.split(':')
 		pd = comp[1]

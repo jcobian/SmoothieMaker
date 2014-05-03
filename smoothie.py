@@ -157,13 +157,9 @@ class GameSpace:
 
 			pygame.display.flip()
 			self.current_ticks+=1
-			self.sendData()
 			return 0
 		
-	def sendData(self):
-		pd = pickle.dumps(self.blender.rect)
-		score = self.score
-		self.commandConn.transport.write(str(self.playerNumber)+":"+pd+':'+str(score))
+
 
 	def updateMyFruits(self,fruitsList):
 		del self.fruits[:]
