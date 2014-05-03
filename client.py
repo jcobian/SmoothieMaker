@@ -74,7 +74,6 @@ class CommandConn(protocol.Protocol):
 				vspeed = int(comp[6])
 				foodType = comp[7]
 				print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
-				self.closeConn()
 				self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
 
 			 
