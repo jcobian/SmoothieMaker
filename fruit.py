@@ -42,7 +42,8 @@ class Fruit(pygame.sprite.Sprite):
 		if self.frozen == False:
 			self.rect = self.rect.move(0,self.vspeed)
 			if self.rect.top >= self.gs.height:
-				self.gs.fruits.remove(self)
+				pass
+				#self.gs.fruits.remove(self)
 		else:
 			self.current_tick+=1
 			#after certain timedelay, unfreeze yourself
