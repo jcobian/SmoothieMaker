@@ -22,6 +22,8 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue = DeferredQueue()
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
+	def freezeFruit(self,fruitID):
+		self.transport.write('Freeze:'+str(fruitID))
 
 	def sendMyData(self,fruitData):
 		datapd =  pickle.dumps(fruitData)
@@ -62,7 +64,10 @@ class FruitConn(protocol.Protocol):
 
 		elif data == 'ready for more':
 			self.readyForMore()
-			
+		elif data.startswith('Freeze'):
+			comp = data.split(':')
+			fruitID = int(data[1])
+			self.gs.freezeFruitWithID(fruitID)
 		else:
 			self.parseData(data)
 
