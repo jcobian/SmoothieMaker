@@ -161,10 +161,10 @@ class GameSpace:
 			return 0
 		
 	def sendData(self):
-		pd = pickle.dumps(self.gs.blender.rect)
-		score = self.gs.score
+		pd = pickle.dumps(self.blender.rect)
+		score = self.score
 		self.commandConn.trasnport.write(str(self.playerNumber)+":"+pd+':'+str(score))
-		
+
 	def updateMyFruits(self,fruitsList):
 		del self.fruits[:]
 		for fd in fruitsList:
