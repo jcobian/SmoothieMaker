@@ -100,7 +100,7 @@ class GameSpace:
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(fruit)
 				self.fruitsOpp.append(fruit2)
-
+			'''
 			if self.current_ticks % 180 == 0:
 				self.foodType = 'vegetable'
 				xpos = random.randint(0,self.width/2)
@@ -114,6 +114,7 @@ class GameSpace:
 				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(veggie)
 				self.fruitsOpp.append(veggie2)
+			'''
 
 			#handle user inputs
 			for event in pygame.event.get():

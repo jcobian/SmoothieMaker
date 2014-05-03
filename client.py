@@ -23,7 +23,7 @@ class CommandConn(protocol.Protocol):
 		foodType = self.gs.foodType
 		randVSpeed = self.gs.randVSpeed
 		print 'send',foodType
-		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType)
+		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+'fruit')
 		'''
 		myFruits = self.gs.fruits
 		oppFruits = self.gs.fruitsOpp
@@ -89,9 +89,7 @@ class CommandConn(protocol.Protocol):
 		xpos = int(comp[4])
 		vspeed = int(comp[5])
 		foodType = comp[6]
-		print data
-		print 'parse',foodType
-		self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
+		self.gs.addFruit(fruitInt,xpos,vspeed,'fruit')
 		'''
 		pickleDict = comp[3]
 		myDict = pickle.loads(pickleDict)
