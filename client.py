@@ -25,7 +25,7 @@ class CommandConn(protocol.Protocol):
 		valid = self.gs.shouldSendData
 		if valid == 1:
 			self.gs.shouldSendData = 0
-		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType
+		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType+'end'
 		comp = theString.split(':')
 		print 'comp send',comp
 		self.transport.write(theString)
