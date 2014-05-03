@@ -112,6 +112,7 @@ class GameSpace:
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				xpos += self.width/2
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
 				self.fruits.append(fruit)
 				self.fruitsOpp.append(fruit2)
 			
@@ -127,6 +128,8 @@ class GameSpace:
 				veggie = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				xpos+=self.width/2
 				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
+
 				self.fruits.append(veggie)
 				self.fruitsOpp.append(veggie2)
 			

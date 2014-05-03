@@ -59,7 +59,6 @@ class CommandConn(protocol.Protocol):
 		for piece in splitUp:
 			if len(piece)==0:
 				continue
-
 				comp = piece.split(':')
 				print 'receive comp',comp
 				pd = comp[1]
@@ -73,6 +72,8 @@ class CommandConn(protocol.Protocol):
 					xpos = int(comp[5])
 					vspeed = int(comp[6])
 					foodType = comp[7]
+					print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
+					self.closeConn()
 					self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
 
 			 
