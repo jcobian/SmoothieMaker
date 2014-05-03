@@ -35,18 +35,20 @@ class Fruit(pygame.sprite.Sprite):
 		self.vspeed = vspeed
 		self.current_tick = 0
 
+		self.start = False
+
 	#on each tick, move down the screen if you're not frozen
 	def tick(self):
 		if self.frozen == False:
 			self.rect = self.rect.move(0,self.vspeed)
 			if self.rect.top >= self.gs.height:
-				pass
-				#self.gs.fruits.remove(self)
+				self.gs.fruits.remove(self)
 		else:
 			self.current_tick+=1
 			#after certain timedelay, unfreeze yourself
 			if self.current_tick >= 180:
 				self.unFreezeFruit()
+		
 
 	def freezeFruit(self):
 		#only want to freeze a fruit that is unfrozen

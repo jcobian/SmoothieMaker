@@ -72,7 +72,6 @@ class GameSpace:
 		self.gameObjectsList.append(self.blender)
 
 		self.quitGame = False
-		self.shouldSendData = 0
 		
 
 
@@ -113,10 +112,10 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				fruit = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
 				self.commandConn.fruitQueue.put(fruitData)
-				self.fruits.append(fruit)
+				self.fruits.append(fruitToAdd)
 			elif self.current_ticks %180 == 0:
 				self.foodType = 'vegetable'
 				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
@@ -125,29 +124,11 @@ class GameSpace:
 				self.randXPos = xpos
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
-				fruit = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType)
 				self.commandConn.fruitQueue.put(fruitData)
-				self.fruits.append(fruit)
+				self.fruits.append(fruitToAdd)
 
-			'''
-			if self.current_ticks % 180 == 0:
-				self.foodType = 'vegetable'
-				xpos = random.randint(0,self.width/2)
-				self.xpos = xpos
-				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
-				self.randFruitInt = randFruitInt
-				vspeed = random.randint(3,6)
-				self.randVSpeed = vspeed
-				veggie = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-				xpos+=self.width/2
-				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
-				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
-
-				self.fruits.append(veggie)
-				self.fruitsOpp.append(veggie2)
-				self.shouldSendData = 1
-			'''
 			
 		
 			#handle user inputs
