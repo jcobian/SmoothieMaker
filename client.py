@@ -57,6 +57,7 @@ class CommandConn(protocol.Protocol):
 			print 'Waiting for another player..'
 		elif data == 'player quit':
 			print 'Your opponent quit, sorry'
+			reactor.stop()
 			sys.exit()
 		elif data.startswith('PN'):
 			comp = data.split(':')
