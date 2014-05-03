@@ -160,7 +160,7 @@ class GameSpace:
 			return 0
 		
 	def updateMyFruits(self,fruitsList):
-		del self.fruit[:]
+		del self.fruits[:]
 		for fd in fruitsList:
 			imageName = fd['image']
 			frozen = fd['frozen']
