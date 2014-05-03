@@ -62,8 +62,8 @@ class GameSpace:
 		self.scoreLabel = ScoreLabel(self,playerType='user')
 		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
 
-		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=10,size=50)
-		self.oppLabel = PlayerLabel(self,textLabel="Opponent",xpos=3*self.width/4,ypos=10,size=50)
+		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=40,size=50)
+		self.oppLabel = PlayerLabel(self,textLabel="Opponent",xpos=3*self.width/4,ypos=40,size=50)
 
 
 		self.gameObjectsList = list()
