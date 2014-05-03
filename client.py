@@ -22,8 +22,11 @@ class CommandConn(protocol.Protocol):
 		randXPos = self.gs.randXPos
 		foodType = self.gs.foodType
 		randVSpeed = self.gs.randVSpeed
+		valid = self.gs.shouldSendData
+		if valid == 1:
+			self.gs.shouldSendData = 0
 		print 'send',foodType
-		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+'fruit')
+		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+'fruit')
 		'''
 		myFruits = self.gs.fruits
 		oppFruits = self.gs.fruitsOpp
@@ -85,11 +88,13 @@ class CommandConn(protocol.Protocol):
 		self.gs.updateOpponent(opponent)
 		oppScore = int(comp[2])
 		self.gs.opponentScore = oppScore
-		fruitInt = int(comp[3])
-		xpos = int(comp[4])
-		vspeed = int(comp[5])
-		foodType = comp[6]
-		self.gs.addFruit(fruitInt,xpos,vspeed,'fruit')
+		valid = int(comp[3])
+		if valid == 1:
+			fruitInt = int(comp[4])
+			xpos = int(comp[5])
+			vspeed = int(comp[6])
+			foodType = comp[7]
+			self.gs.addFruit(fruitInt,xpos,vspeed,'fruit')
 		'''
 		pickleDict = comp[3]
 		myDict = pickle.loads(pickleDict)

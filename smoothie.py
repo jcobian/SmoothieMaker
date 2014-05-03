@@ -67,6 +67,7 @@ class GameSpace:
 		self.gameObjectsList.append(self.blender)
 
 		self.quitGame = False
+		self.shouldSendData = 0
 		
 
 
@@ -88,6 +89,7 @@ class GameSpace:
 			self.goToGameOver('Opponent Won')
 		else:
 			if self.current_ticks%120 == 0:
+				self.shouldSendData = 1
 				self.foodType = 'fruit'
 				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
 				self.randFruitInt = randFruitInt
@@ -115,7 +117,7 @@ class GameSpace:
 				self.fruits.append(veggie)
 				self.fruitsOpp.append(veggie2)
 			'''
-
+		
 			#handle user inputs
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
@@ -167,6 +169,7 @@ class GameSpace:
 			
 
 			pygame.display.flip()
+			self.
 			self.current_ticks+=1
 			return 0
 		
