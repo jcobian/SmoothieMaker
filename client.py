@@ -50,6 +50,7 @@ class FruitConn(protocol.Protocol):
 		elif data.startswith('PN'):
 			comp = data.split(':')
 			self.playerNumber = int(comp[1])
+			self.client.blenderConn.playerNumber = self.playerNumber
 			print 'Game Started: You are Player',self.playerNumber
 			self.gs = GameSpace(self,self.playerNumber)
 			self.gs.main()
@@ -79,11 +80,12 @@ class FruitConn(protocol.Protocol):
 class BlenderConn(protocol.Protocol):
 	def __init__(self,client):
 		self.client = client
+		self.playerNumber = 0
 
 	def connectionMade(self):
 		self.client.blenderConn = self
 
-	def sendMyData(self,fruitData):
+	def sendMyData(self):
 		pd = pickle.dumps(self.gs.blender.rect)
 		score = self.gs.score
 		theString = str(self.playerNumber)+':'+pd+':'+str(score)
