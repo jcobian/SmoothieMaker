@@ -60,7 +60,7 @@ class Fruit(pygame.sprite.Sprite):
 		if self.frozen == False:
 			self.rect = self.rect.move(0,self.vspeed)
 			if self.rect.top >= self.gs.height:
-				if side == 'left':
+				if self.side == 'left':
 					self.gs.fruits.remove(self)
 				else:
 					self.gs.fruitsOpp.remove(self)
