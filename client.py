@@ -38,6 +38,7 @@ class CommandConn(protocol.Protocol):
 			tempDict = dict()
 			tempDict['image'] = fruit.fruitImage
 			tempDict['frozen'] = fruit.frozen
+			print 'in send data',fruit.rect.top
 			tempDict['rect'] = pickle.dumps(fruit.rect)
 			tempDict['vspeed'] = fruit.vspeed
 			tempDict['currentTicks'] = fruit.current_tick
