@@ -8,6 +8,7 @@ from progressBar import ProgressBar
 from blackRect import BlackRect
 from scoreLabel import ScoreLabel
 from playerLabel import PlayerLabel
+from fruitdata import FruitData
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self,commandConn,playerNumber):
@@ -109,6 +110,8 @@ class GameSpace:
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
 				fruit = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
+				fruitData = FruitData(self.randFruitInt,self.xpos,self.vspeed,self.foodType)
+				self.commandConn.fruitQueue.put(fruitData)
 				xpos += self.width/2
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType

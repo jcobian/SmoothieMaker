@@ -3,6 +3,7 @@ from twisted.internet.task import LoopingCall
 import sys
 import pickle
 from smoothie import GameSpace
+from twisted.internet.defer import DeferredQueue
 class Client():
 	def __init__(self,host,port):
 		self.host = host
@@ -15,21 +16,35 @@ class CommandConn(protocol.Protocol):
 	def __init__(self,client):
 		self.numMessagesReceived = 0
 		self.client = client
-	def sendMyData(self):
+		self.fruitQueue = DeferredQueue()
+		self.fruitQueue.get().addCallback(self.sendMyData)
+
+
+	def sendMyData(self,fruitData):
 		pd = pickle.dumps(self.gs.blender.rect)
 		score = self.gs.score
+		datapd =  pickle.dumps(fruitData)
+		'''
+		randFruitInt = fruitData.fruitInt
+		randXPos = fruitData.xpos
+		foodType = fruitData.fruitType
+		randVSpeed = fruitData.vspeed
+		'''
+		'''
 		randFruitInt = self.gs.randFruitInt
 		randXPos = self.gs.randXPos
 		foodType = self.gs.foodType
 		randVSpeed = self.gs.randVSpeed
-		valid = self.gs.shouldSendData
-		print 'send valid is ',valid
-		if valid == 1:
-			self.gs.shouldSendData = 0
-		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType+'end'
+		'''
+		theString = str(self.playerNumber)+':'+pd+':'+str(score)+':'+datapd
+		#theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType+'end'
 		comp = theString.split(':')
-		if valid == 1:
-			self.transport.write(theString)
+		self.transport.write(theString)
+
+	def readyForMore(self):
+		self.fruitQueue.get().addCallback(self.sendMyData)
+
+
 		
 		
 	def closeConn(self):
@@ -50,12 +65,27 @@ class CommandConn(protocol.Protocol):
 			self.gs.main()
 			self.lc = LoopingCall(self.gs.gameLoopIteration)
 			self.lc.start(1/60)
-			self.sendMyData()
+			#IS THIS NEEDED
+			#self.sendMyData()
+		elif data == 'ready for more':
+			self.readyForMore()
 			
 		else:
 			self.parseData(data)
-			self.sendMyData()
+			#self.sendMyData()
 	def parseData(self,data):
+		comp = data.split(':')
+		pd = comp[1]
+		opponent = pickle.loads(pd)
+		self.gs.updateOpponent(opponent)
+		oppScore = int(comp[2])
+		self.gs.opponentScore = oppScore
+		fruitData = pickle.loads(comp[3])
+		self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType)
+		self.transport.write('added fruit:'+str(self.playerNumber))
+
+
+		'''
 		splitUp = data.split('end')
 		for piece in splitUp:
 			if len(piece)==0:
@@ -75,6 +105,7 @@ class CommandConn(protocol.Protocol):
 				foodType = comp[7]
 				print self.playerNumber,'is adding:',fruitInt,xpos,vspeed,foodType
 				self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
+		'''
 
 			 
 		
