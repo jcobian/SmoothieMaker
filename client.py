@@ -25,38 +25,12 @@ class CommandConn(protocol.Protocol):
 		valid = self.gs.shouldSendData
 		if valid == 1:
 			self.gs.shouldSendData = 0
-		print 'send',foodType
-		self.transport.write(str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType)
-		'''
-		myFruits = self.gs.fruits
-		oppFruits = self.gs.fruitsOpp
-		myDict = dict()
-		fruitList = list()
-		for fruit in myFruits:
-			tempDict = dict()
-			tempDict['image'] = fruit.fruitImage
-			tempDict['frozen'] = fruit.frozen
-			tempDict['rect'] = pickle.dumps(fruit.rect)
-			tempDict['vspeed'] = fruit.vspeed
-			tempDict['currentTicks'] = fruit.current_tick
-			fruitList.append(tempDict)
-		myDict['oppFruits'] = fruitList
-
-		oppFruitList = list()
-		for fruit in oppFruits:
-			tempDict = dict()
-			tempDict['image'] = fruit.fruitImage
-			tempDict['frozen'] = fruit.frozen
-			print 'in send data',fruit.rect.top
-			tempDict['rect'] = pickle.dumps(fruit.rect)
-			tempDict['vspeed'] = fruit.vspeed
-			tempDict['currentTicks'] = fruit.current_tick
-			oppFruitList.append(tempDict)
-
-		myDict['fruits'] = oppFruitList
-		pickleDict = pickle.dumps(myDict)
-		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score)+':'+pickleDict)
-		'''
+		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType
+		print 'send',theString
+		comp = theString.split(':')
+		print 'comp send',comp
+		self.transport.write(theString)
+		
 		
 	def closeConn(self):
 		reactor.stop()
@@ -82,7 +56,9 @@ class CommandConn(protocol.Protocol):
 			self.parseData(data)
 			self.sendMyData()
 	def parseData(self,data):
+		print 'receive',data
 		comp = data.split(':')
+		print 'receive comp',comp
 		pd = comp[1]
 		opponent = pickle.loads(pd)
 		self.gs.updateOpponent(opponent)
@@ -95,12 +71,7 @@ class CommandConn(protocol.Protocol):
 			vspeed = int(comp[6])
 			foodType = comp[7]
 			self.gs.addFruit(fruitInt,xpos,vspeed,foodType)
-		'''
-		pickleDict = comp[3]
-		myDict = pickle.loads(pickleDict)
-		self.gs.updateMyFruits(myDict['fruits'])
-		self.gs.updateOppFruits(myDict['oppFruits'])
-		'''
+		
 		
 	def gameOver(self,text):
 		self.lc = LoopingCall(self.gs.goToGameOver,(text))
