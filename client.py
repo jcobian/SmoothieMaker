@@ -80,7 +80,6 @@ class BlenderConn(protocol.Protocol):
 	def sendMyData(self,fruitData):
 		pd = pickle.dumps(self.gs.blender.rect)
 		score = self.gs.score
-		
 		theString = str(self.playerNumber)+':'+pd+':'+str(score)
 		comp = theString.split(':')
 		self.transport.write(theString)
