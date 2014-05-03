@@ -27,7 +27,6 @@ class CommandConn(protocol.Protocol):
 			self.gs.shouldSendData = 0
 		theString= str(self.playerNumber)+':'+pd+':'+str(score)+':'+str(valid)+':'+str(randFruitInt)+':'+str(randXPos)+':'+str(randVSpeed)+':'+foodType+'end'
 		comp = theString.split(':')
-		print 'comp send',comp
 		self.transport.write(theString)
 		
 		
@@ -60,7 +59,6 @@ class CommandConn(protocol.Protocol):
 			if len(piece)==0:
 				continue
 				comp = piece.split(':')
-				print 'receive comp',comp
 				pd = comp[1]
 				opponent = pickle.loads(pd)
 				self.gs.updateOpponent(opponent)

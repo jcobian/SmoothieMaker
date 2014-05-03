@@ -101,7 +101,6 @@ class GameSpace:
 			return 0
 		else:
 			if self.current_ticks%120 == 0:
-				self.shouldSendData = 1
 				self.foodType = 'fruit'
 				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
 				self.randFruitInt = randFruitInt
@@ -115,9 +114,10 @@ class GameSpace:
 				print self.playerNumber,'is creating:',self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType
 				self.fruits.append(fruit)
 				self.fruitsOpp.append(fruit2)
+				self.shouldSendData = 1
+
 			
 			if self.current_ticks % 180 == 0:
-				self.shouldSendData = 1
 				self.foodType = 'vegetable'
 				xpos = random.randint(0,self.width/2)
 				self.xpos = xpos
@@ -132,6 +132,8 @@ class GameSpace:
 
 				self.fruits.append(veggie)
 				self.fruitsOpp.append(veggie2)
+				self.shouldSendData = 1
+
 			
 		
 			#handle user inputs
