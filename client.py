@@ -58,7 +58,6 @@ class CommandConn(protocol.Protocol):
 		elif data == 'player quit':
 			print 'Your opponent quit, sorry'
 			reactor.stop()
-			sys.exit()
 		elif data.startswith('PN'):
 			comp = data.split(':')
 			self.playerNumber = int(comp[1])
