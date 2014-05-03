@@ -18,7 +18,34 @@ class CommandConn(protocol.Protocol):
 	def sendMyData(self):
 		pd = pickle.dumps(self.gs.blender.rect)
 		score = self.gs.score
-		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score))
+		myFruits = self.gs.fruits
+		oppFruits = self.gs.fruitsOpp
+		myDict = dict()
+		fruitList = list()
+		for fruit in myFruits:
+			tempDict = dict()
+			tempDict['image'] = fruit.fruitImage
+			tempDict['frozen'] = fruit.frozen
+			tempDict['rect'] = pickle.dumps(fruit.rect)
+			tempDict['vspeed'] = fruit.vspeed
+			tempDict['currentTicks'] = fruit.currentTicks
+			fruitList.append(tempDict)
+		myDict['oppFruits'] = fruitList
+		
+		oppFruitList = list()
+		for fruit in oppFruits:
+			tempDict = dict()
+			tempDict['image'] = fruit.fruitImage
+			tempDict['frozen'] = fruit.frozen
+			tempDict['rect'] = pickle.dumps(fruit.rect)
+			tempDict['vspeed'] = fruit.vspeed
+			tempDict['currentTicks'] = fruit.currentTicks
+			oppFruitList.append(tempDict)
+
+		myDict['fruits'] = oppFruitList
+		pickleDict = pickle.dumps(myDict)
+
+		self.transport.write(str(self.playerNumber)+":"+pd+':'+str(score)+':'+pickleDict)
 		
 
 	def connectionMade(self):
@@ -46,6 +73,10 @@ class CommandConn(protocol.Protocol):
 		self.gs.updateOpponent(opponent)
 		oppScore = int(comp[2])
 		self.gs.opponentScore = oppScore
+		pickleDict = comp[3]
+		myDict = pickle.loads(pickleDict)
+		self.gs.updateMyFruits(myDict['fruits'])
+		self.gs.updateOppFruits(myDict['oppFruits'])
 
 
 	

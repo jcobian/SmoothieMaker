@@ -9,16 +9,16 @@ class Fruit(pygame.sprite.Sprite):
 		#load a random image
 		self.randFruitInt = randFruitInt
 		if self.type == 'fruit':
-			fruitImage = self.gs.listOfFruitImages[self.randFruitInt]
+			self.fruitImage = self.gs.listOfFruitImages[self.randFruitInt]
 			frozenImage = self.gs.listOfFrozenFruitImages[self.randFruitInt]
 
 		elif self.type == 'vegetable':
-			fruitImage = self.gs.listOfVegetableImages[self.randFruitInt]
+			self.fruitImage = self.gs.listOfVegetableImages[self.randFruitInt]
 			frozenImage = self.gs.listOfFrozenVegetableImages[self.randFruitInt]
 
 
 
-		self.image = pygame.image.load(fruitImage)
+		self.image = pygame.image.load(self.fruitImage)
 		self.rect = self.image.get_rect()
 
 		#get rand x starting pos
@@ -60,6 +60,14 @@ class Fruit(pygame.sprite.Sprite):
 		self.image = self.orig_image
 		self.rect = self.image.get_rect(center=self.rect.center)
 		self.current_tick = 0
+	def updateFruit(self,imageName,frozen,rect,vspeed,currentTicks):
+		self.image = pygame.image.load(imageName)
+		self.frozen = frozen
+		self.rect = rect
+		self.vspeed = vspeed
+		self.current_tick = currentTicks
+
+
 
 				
 	

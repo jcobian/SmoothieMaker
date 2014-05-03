@@ -1,5 +1,6 @@
 import pygame
 import random
+import pickle
 import sys
 from blender import Blender
 from fruit import Fruit
@@ -12,11 +13,12 @@ class GameSpace:
 	def __init__(self,commandConn,playerNumber):
 		self.commandConn = commandConn
 		self.listOfFruitImages=['strawberry.png','banana.png']
-		self.listOfVegetableImages = ['potato.png', 'onion.jpg']
+		self.listOfVegetableImages = ['potato.png', 'onion.png']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png']
-		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.jpg']
+		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png']
 		self.playerNumber = playerNumber
 		self.fruits = list()
+		self.fruitsOpp = list()
 		self.score = 0
 		self.opponentScore = 0
 		self.winningScore = 100 
@@ -85,7 +87,7 @@ class GameSpace:
 		elif self.opponentScore >= self.winningScore:
 			self.goToGameOver('Opponent Won')
 		else:
-			if self.current_ticks%60 == 0:
+			if self.current_ticks%120 == 0:
 				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
 				xpos = random.randint(0,self.width/2)
 				vspeed = random.randint(3,6)
@@ -93,9 +95,9 @@ class GameSpace:
 				xpos += self.width/2
 				fruit2 = Fruit(self,type='fruit',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(fruit)
-				self.fruits.append(fruit2)
+				self.fruitsOpp.append(fruit2)
 
-			if self.current_ticks % 90 == 0:
+			if self.current_ticks % 180 == 0:
 				xpos = random.randint(0,self.width/2)
 				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
 				vspeed = random.randint(3,6)
@@ -103,7 +105,7 @@ class GameSpace:
 				xpos+=self.width/2
 				veggie2 = Fruit(self,type='vegetable',xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed)
 				self.fruits.append(veggie)
-				self.fruits.append(veggie2)
+				self.fruitsOpp.append(veggie2)
 
 			#handle user inputs
 			for event in pygame.event.get():
@@ -121,6 +123,8 @@ class GameSpace:
 			for obj in self.gameObjectsList:
 				obj.tick()
 			for fr in self.fruits:
+				fr.tick()
+			for fr in self.fruitsOpp:
 				fr.tick()
 			self.scoreLabel.tick()
 			self.scoreLabelOpponent.tick()
@@ -140,6 +144,9 @@ class GameSpace:
 
 			for fr in self.fruits:
 				self.screen.blit(fr.image,fr.rect)
+			for fr in self.fruitsOpp:
+				self.screen.blit(fr.image,fr.rect)
+
 			for obj in self.gameObjectsList:
 				self.screen.blit(obj.image,obj.rect)
 			self.screen.blit(self.opponent.image,self.opponent.rect)
@@ -152,6 +159,30 @@ class GameSpace:
 			self.current_ticks+=1
 			return 0
 		
+	def updateMyFruits(self,fruitsList):
+		del self.fruit[:]
+		for fd in fruitsList:
+			imageName = fd['image']
+			frozen = fd['frozen']
+			rect = pickle.loads(fd['rect'])
+			vspeed = fd['vspeed']
+			currentTicks = fd['currentTicks']
+			fruit = Fruit(gs=self)
+			fruit.updateFruit(imageName,frozen,rect,vspeed,currentTicks)
+			self.fruits.append(fruit)
+	def updateOppFruits(self,fruitsList):
+		del self.fruitsOpp[:]
+		for fd in fruitsList:
+			imageName = fd['image']
+			frozen = fd['frozen']
+			rect = pickle.loads(fd['rect'])
+			vspeed = fd['vspeed']
+			currentTicks = fd['currentTicks']
+			fruit = Fruit(gs=self)
+			fruit.updateFruit(imageName,frozen,rect,vspeed,currentTicks)
+			self.fruitsOpp.append(fruit)
+
+
 	def updateOpponent(self,rect):
 		self.opponent.rect = rect
 		self.opponent.rect = self.opponent.rect.move(self.width/2,0)
