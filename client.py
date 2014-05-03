@@ -9,6 +9,8 @@ class Client():
 		self.host = host
 		self.fruitPort = fruitPort
 		self.blenderPort = blenderPort
+		self.fruitConn = None
+		self.blenderConn = None
 		reactor.connectTCP(self.host,self.blenderPort,BlenderConnFactory(self))
 		reactor.connectTCP(self.host,self.fruitPort,FruitConnFactory(self))
 		reactor.run()
@@ -32,6 +34,7 @@ class FruitConn(protocol.Protocol):
 	
 		
 	def connectionMade(self):
+		self.client.fruitConn = self
 		self.transport.write('connect')
 
 	def closeConn(self):
@@ -52,6 +55,7 @@ class FruitConn(protocol.Protocol):
 			self.gs.main()
 			self.lc = LoopingCall(self.gs.gameLoopIteration)
 			self.lc.start(1/60)
+			self.client.blenderConn.sendMyData()
 
 		elif data == 'ready for more':
 			self.readyForMore()
@@ -76,6 +80,8 @@ class BlenderConn(protocol.Protocol):
 	def __init__(self,client):
 		self.client = client
 
+	def connectionMade(self):
+		self.client.blenderConn = self
 
 	def sendMyData(self,fruitData):
 		pd = pickle.dumps(self.gs.blender.rect)
@@ -84,10 +90,6 @@ class BlenderConn(protocol.Protocol):
 		comp = theString.split(':')
 		self.transport.write(theString)
 
-
-
-		
-		
 	def closeConn(self):
 		reactor.stop()
 
@@ -98,8 +100,8 @@ class BlenderConn(protocol.Protocol):
 	def parseData(self,data):
 		comp = data.split(':')
 		pd = comp[1]
-		opponent = pickle.loads(pd)
-		self.gs.updateOpponent(opponent)
+		rect = pickle.loads(pd)
+		self.gs.updateOpponent(rect)
 		oppScore = int(comp[2])
 		self.gs.opponentScore = oppScore
 		
