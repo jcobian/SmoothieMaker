@@ -116,7 +116,7 @@ class GameSpace:
 				self.fruitsOpp.append(fruit2)
 				self.shouldSendData = 1
 
-			
+			'''
 			if self.current_ticks % 180 == 0:
 				self.foodType = 'vegetable'
 				xpos = random.randint(0,self.width/2)
@@ -133,7 +133,7 @@ class GameSpace:
 				self.fruits.append(veggie)
 				self.fruitsOpp.append(veggie2)
 				self.shouldSendData = 1
-
+			'''
 			
 		
 			#handle user inputs
