@@ -82,9 +82,9 @@ class FruitConn(protocol.Protocol):
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 			else:
 				if fruitData.freezeDirection == 'left':
-					self.gs.freezeLeftFruitWithID(fruitData.fruitID)
+					self.gs.freezeLeftFruitWithID(fruitData.freezeID)
 				else:
-					self.gs.freezeRightFruitWithID(fruitData.fruitID)
+					self.gs.freezeRightFruitWithID(fruitData.freezeID)
 			self.fruitQueue.get().addCallback(self.sendMyData)
 			#self.transport.write('finished fruit data:'+str(self.playerNumber))
 			
