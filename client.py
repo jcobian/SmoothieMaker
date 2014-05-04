@@ -106,7 +106,10 @@ class FruitConn(protocol.Protocol):
 			vspeed = int(comp[3])
 			foodType = comp[4]
 			fruitID = int(comp[5])
-			freezeString=comp[6]
+			freezeString = ''
+			if len(comp) >=7:
+				freezeString=comp[6]
+
 			print 'got here'
 			#fruitData = pickle.loads(comp[1])
 			if len(freezeString)!=0:
