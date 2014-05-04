@@ -24,7 +24,7 @@ class FruitConn(protocol.Protocol):
 
 	def freezeFruit(self,fruitID):
 		print 'sending',fruitID
-		self.transport.write('Freeze:'+str(fruitID))
+		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID))
 
 	def sendMyData(self,fruitData):
 		datapd =  pickle.dumps(fruitData)
@@ -68,7 +68,7 @@ class FruitConn(protocol.Protocol):
 		elif data.startswith('Freeze'):
 			print 'receive',data
 			comp = data.split(':')
-			fruitID = int(comp[1])
+			fruitID = int(comp[2])
 			self.gs.freezeFruitWithID(fruitID)
 		else:
 			self.parseData(data)
