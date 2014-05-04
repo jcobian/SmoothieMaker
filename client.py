@@ -35,9 +35,6 @@ class FruitConn(protocol.Protocol):
 			datapd =  pickle.dumps(fruitData)
 			theString = str(self.playerNumber)+':'+datapd
 			self.transport.write(theString)
-
-
-	
 		
 	def connectionMade(self):
 		self.client.fruitConn = self
@@ -84,7 +81,10 @@ class FruitConn(protocol.Protocol):
 			if fruitData.dataType == 'create':
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 			else:
-				self.handleFreezeData(fruitData.freezeString)
+				if fruitData.freezeDirection == 'left':
+					self.gs.freezeLeftFruitWithID(fruitData.fruitID)
+				else:
+					self.gs.freezeRightWithID(fruitData.fruitID)
 			self.fruitQueue.get().addCallback(self.sendMyData)
 			#self.transport.write('finished fruit data:'+str(self.playerNumber))
 			
@@ -93,18 +93,6 @@ class FruitConn(protocol.Protocol):
 			print str(ex)
 			print comp
 
-			 
-
-
-	def handleFreezeData(self,data):
-		comp = data.split(':')
-		fruitID = comp[1]
-		direction = comp[2]
-		print 'Will freeze id:',fruitID,'on the ',direction
-		if direction == 'left':
-			self.gs.freezeLeftFruitWithID(fruitID)
-		else:
-			self.gs.freezeRightWithID(fruitID)
 
 	def gameOver(self,text):
 		self.lc = LoopingCall(self.gs.goToGameOver,(text))
@@ -113,14 +101,12 @@ class FruitConn(protocol.Protocol):
 
 	def freezeLeftFruit(self,fruitID):
 		print 'Player ',str(self.playerNumber),'clicked right, to freeze other left fruit'
-		freezeString = str(self.playerNumber)+':'+str(fruitID)+':left'
-		fruitData = FruitData(dataType='freeze',freezeString=freezeString)
+		fruitData = FruitData(dataType='freeze',freezeDirection='left',freezeID=fruitID)
 		self.fruitQueue.put(fruitData)
 
 	def freezeRightFruit(self,fruitID):
 		print 'Player ',str(self.playerNumber),'clicked left, to freeze other right fruit'
-		freezeString = str(self.playerNumber)+':'+str(fruitID)+':right'
-		fruitData = FruitData(dataType='freeze',freezeString=freezeString)
+		fruitData = FruitData(dataType='freeze',freezeDirection='right',freezeID=fruitID)
 		self.fruitQueue.put(fruitData)
 
 
