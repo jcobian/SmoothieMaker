@@ -75,10 +75,13 @@ class FruitConn(protocol.Protocol):
 			self.parseData(data)
 
 	def parseData(self,data):
-		comp = data.split(':')
-		fruitData = pickle.loads(comp[1])
-		self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
-		self.transport.write('added fruit:'+str(self.playerNumber))
+		try:
+			comp = data.split(':')
+			fruitData = pickle.loads(comp[1])
+			self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
+			self.transport.write('added fruit:'+str(self.playerNumber))
+		except:
+			print 'Error'
 
 			 
 	def gameOver(self,text):

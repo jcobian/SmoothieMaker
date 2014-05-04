@@ -14,9 +14,9 @@ class GameSpace:
 	def __init__(self,commandConn,playerNumber,randSeed):
 		self.commandConn = commandConn
 		self.listOfFruitImages=['strawberry.png','banana.png','raspberry.png','blueberry.png']
-		self.listOfVegetableImages = ['potato.png', 'onion.png']
+		self.listOfVegetableImages = ['potato.png', 'onion.png','broccoli.png']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png','raspberryfrozen.png','blueberryfrozen.png']
-		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png']
+		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png','broccolifrozen.png']
 		self.goldenImage = 'pineapple.png'
 		self.frozenGoldImage = 'pineapplefrozen.png'
 		self.playerNumber = playerNumber
@@ -217,14 +217,11 @@ class GameSpace:
 
 		if self.score > self.winningScore:
 			self.score = self.winningScore
-		self.checkIfWon()
 	def subFromScore(self):
 		self.score-=20
 		if self.score < 0:
 			self.score = 0
-	def checkIfWon(self):
-		if self.score >= self.winningScore:
-			print 'won'
+	
 	def freezeFruits(self,mx,my):
 		for fruit in self.fruits:
 			if fruit.rect.collidepoint(mx,my):
