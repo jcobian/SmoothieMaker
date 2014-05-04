@@ -12,30 +12,56 @@ from fruitdata import FruitData
 #main gamespace where the overarching game structure is
 class GameSpace:
 	def __init__(self,commandConn,playerNumber,randSeed):
+		#reference to the connection to the server
 		self.commandConn = commandConn
+		self.playerNumber = playerNumber
+		random.seed(randSeed)
+
+		#list of images
 		self.listOfFruitImages=['strawberry.png','banana.png','raspberry.png','blueberry.png']
 		self.listOfVegetableImages = ['potato.png', 'onion.png','broccoli.png']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png','raspberryfrozen.png','blueberryfrozen.png']
 		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png','broccolifrozen.png']
 		self.goldenImage = 'pineapple.png'
 		self.frozenGoldImage = 'pineapplefrozen.png'
-		self.playerNumber = playerNumber
 
+		#list of your fruits and opponents fruits (the ones on the right)
 		self.fruits = list()
 		self.fruitsOpp = list()
+
 
 		self.score = 0
 		self.opponentScore = 0
 		self.winningScore = 200 
 
+		#for screen drawings
 		self.size = self.width, self.height = 1280,800
 		self.black = 0,0,0
 		self.white = 255,255,255
+		#to draw the white veritcal line down the middle
 		self.point1 = self.width/2,0
 		self.point2 = self.width/2,self.height
-		self.gameIsOver = False
 
-		random.seed(randSeed)
+		#create the blender object that represents you
+		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber,playerType='user')
+
+		opponentPlayerNumber = 1
+		if self.playerNumber == 1:
+			opponentPlayerNumber = 2
+
+		#create the blender object that represents your opponent
+		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber,playerType='opponent')
+
+		self.scoreLabel = ScoreLabel(self,playerType='user')
+		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
+
+		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=40,size=50)
+		self.oppLabel = PlayerLabel(self,textLabel="Opponent",xpos=3*self.width/4,ypos=40,size=50)
+	
+		
+
+		self.counter = 0
+		
 
 
 	def main(self):
@@ -48,56 +74,26 @@ class GameSpace:
 		
 
 		self.screen = pygame.display.set_mode(self.size)
+		#counter of ticks
 		self.current_ticks = 0
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
-		#get playernumber from server
-
-		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber,playerType='user')
-		opponentPlayerNumber = 1
-		if self.playerNumber == 1:
-			opponentPlayerNumber = 2
-
-		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber,playerType='opponent')
-
-		#self.progressBar = ProgressBar(self)
-		#self.blackRect = BlackRect(self)
-		self.scoreLabel = ScoreLabel(self,playerType='user')
-		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
-
-		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=40,size=50)
-		self.oppLabel = PlayerLabel(self,textLabel="Opponent",xpos=3*self.width/4,ypos=40,size=50)
-
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
 		self.gameObjectsList.append(self.opponent)
 
-		self.quitGame = False
-		self.counter = 0
+		self.gameLabels = list()
+		self.gameLabels.append(self.scoreLabel)
+		self.gameLabels.append(self.scoreLabelOpponent)
+		self.gameLabels.append(self.youLabel)
+		self.gameLabels.append(oppLabel)
 
-
-	def goToGameOver(self,text):
-		self.screen.fill(self.black)
-		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
-
-
-		#handle user inputs
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				pygame.display.quit()
-				self.commandConn.lc.stop()
-				self.commandConn.closeConn()
-				return 1
-
-		self.screen.blit(winnerLabel.label,winnerLabel.rect)
-		pygame.display.flip()
-
-
-
+		
 
 	def gameLoopIteration(self):
+		#if you or opponent won, stop the looping call and tell the connection which will generate a new looping call
 		if self.score >= self.winningScore:
 			self.commandConn.lc.stop()
 			self.commandConn.gameOver('You Won')
@@ -106,26 +102,39 @@ class GameSpace:
 			self.commandConn.lc.stop()
 			self.commandConn.gameOver('Opponent Won')
 			return 0
+		#otherwise game is not over
 		else:
+			#every 2 seconds generate a fruit
 			if self.current_ticks%120 == 0:
 				self.foodType = 'fruit'
+
+				#10% chance of getting a gold fruit (which is worth double)
 				goldRandNum = random.randint(0,9)
 				if goldRandNum == 0:
 					randFruitInt = -1
 				else:
 					randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
 
+				#get random data to create a fruit
+				#rand fruit int will determine which image is loaded
 				self.randFruitInt = randFruitInt
+				#random position of where it will start on x axis
 				xpos = random.randint(0,self.width/2)
 				self.randXPos = xpos
+				#random velocity
 				vspeed = random.randint(3,6)
 				self.randVSpeed = vspeed
+				#give it a unique id
 				self.fruitID = self.counter
 				self.counter+=1
+				#create the fruit
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
+				#create the data you want to pickle over to the other player so he has the same fruit
 				fruitData = FruitData(self.randFruitInt,self.randXPos,self.randVSpeed,self.foodType,self.fruitID)
+				#add the fruit data over to connection's queue so it can send it over to server (then to other player)
 				self.commandConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
+			#every 3 seconds generate a veggie, do same thing as above
 			elif self.current_ticks %180 == 0:
 				self.foodType = 'vegetable'
 				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
@@ -148,12 +157,12 @@ class GameSpace:
 				if event.type == pygame.KEYDOWN:
 					self.blender.move(event.key)
 				elif event.type == pygame.MOUSEBUTTONDOWN:
+					#get mouse click and see if it collides with a fruit on the screen
 					mx,my = pygame.mouse.get_pos()
 					self.freezeFruits(mx,my)
 				elif event.type == pygame.QUIT:
 					pygame.display.quit()
 					self.commandConn.lc.stop()
-					#self.commandConn.transport.write('player quit')
 					self.commandConn.closeConn()
 					return 1
 
@@ -164,6 +173,9 @@ class GameSpace:
 				fr.tick()
 			for fr in self.fruitsOpp:
 				fr.tick()
+			for label in self.gameLabels:
+				label.tick()
+
 			self.scoreLabel.tick()
 			self.scoreLabelOpponent.tick()
 			self.youLabel.tick()
@@ -172,14 +184,11 @@ class GameSpace:
 			#7 display game objects
 			self.screen.fill(self.black)
 
-
-			self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
-			self.screen.blit(self.scoreLabelOpponent.label,self.scoreLabelOpponent.rect)
-			self.screen.blit(self.youLabel.label,self.youLabel.rect)
-			self.screen.blit(self.oppLabel.label,self.oppLabel.rect)
-
-
-
+			for label in self.gameLabels:
+				self.screen.blit(self.scoreLabel.label,self.scoreLabel.rect)
+				self.screen.blit(self.scoreLabelOpponent.label,self.scoreLabelOpponent.rect)
+				self.screen.blit(self.youLabel.label,self.youLabel.rect)
+				self.screen.blit(self.oppLabel.label,self.oppLabel.rect)
 			for fr in self.fruits:
 				self.screen.blit(fr.image,fr.rect)
 			for fr in self.fruitsOpp:
@@ -187,29 +196,42 @@ class GameSpace:
 
 			for obj in self.gameObjectsList:
 				self.screen.blit(obj.image,obj.rect)
-			self.screen.blit(self.opponent.image,self.opponent.rect)
+			#draw white line down the middle
 			pygame.draw.line(self.screen,self.white,self.point1,self.point2)
-				
-			
-			
-
 			pygame.display.flip()
 			self.current_ticks+=1
 			return 0
-		
 
+	#will be the looping call once the game ends
+	def goToGameOver(self,text):
+		self.screen.fill(self.black)
+		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
+		#handle user inputs
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.display.quit()
+				self.commandConn.lc.stop()
+				self.commandConn.closeConn()
+				return 1
+
+		self.screen.blit(winnerLabel.label,winnerLabel.rect)
+		pygame.display.flip()
+
+	#adds a fruit to your screen, this is a fruit sent over by your opponent which he generated
 	def addFruit(self,fruitInt,xpos,vspeed,foodType,iD):
 		xpos+=self.width/2
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed,fruitID=iD,side='right')
 		self.fruitsOpp.append(food)
 
 
-
+	#updates the rectangle of the opponent blender on your screen
 	def updateOpponent(self,rect):
 		self.opponent.rect = rect
 		self.opponent.rect = self.opponent.rect.move(self.width/2,0)
 		self.opponent.colliderect = self.opponent.rect.inflate(-self.opponent.rect.width*.18,-self.opponent.rect.height*.9)
 		self.opponent.colliderect = self.opponent.colliderect.move((-self.opponent.rect.width*.18)/2,(-self.opponent.rect.height*.9)/2)
+	
+	#add and subtract to your score
 	def addToScore(self,double=False):
 		self.score+=10
 		if double == True:
@@ -217,23 +239,32 @@ class GameSpace:
 
 		if self.score > self.winningScore:
 			self.score = self.winningScore
+
 	def subFromScore(self):
 		self.score-=20
 		if self.score < 0:
 			self.score = 0
-	
+	#will freeze any fruit at mx,my. called when get a click
 	def freezeFruits(self,mx,my):
 		for fruit in self.fruits:
 			if fruit.rect.collidepoint(mx,my):
 				fruit.freezeFruit()
+				self.commandConn.freezeOppFruit(fruit.fruitID)
+
 		for fruit in self.fruitsOpp:
 			if fruit.rect.collidepoint(mx,my):
 				fruit.freezeFruit()
 				self.commandConn.freezeFruit(fruit.fruitID)
+	#freezes a fruit w/ given id
 	def freezeFruitWithID(self,fruitID):
 		for fruit in self.fruits:
 			if fruit.fruitID == fruitID:
 				fruit.freezeFruit()
+	def freezeOpponentFruitWithID(self,fruitID):
+		for fruit in self.fruitsOpp:
+			if fruit.fruitID == fruitID:
+				fruit.freezeFruit()
+
 
 
 			

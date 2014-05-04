@@ -23,7 +23,10 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeFruit(self,fruitID):
-		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID))
+		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
+
+	def freezeOppFruit(self,fruitID):
+		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
 
 	def sendMyData(self,fruitData):
 		datapd =  pickle.dumps(fruitData)
@@ -70,7 +73,11 @@ class FruitConn(protocol.Protocol):
 		elif data.startswith('Freeze'):
 			comp = data.split(':')
 			fruitID = int(comp[2])
-			self.gs.freezeFruitWithID(fruitID)
+			freezeType = comp[3]
+			if freezeType == 'opp':
+				self.gs.freezeOpponentFruitWithID(fruitID)
+			else:
+				self.gs.freezeFruitWithID(fruitID)
 		else:
 			self.parseData(data)
 
