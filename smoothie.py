@@ -13,9 +13,9 @@ from fruitdata import FruitData
 class GameSpace:
 	def __init__(self,commandConn,playerNumber,randSeed):
 		self.commandConn = commandConn
-		self.listOfFruitImages=['strawberry.png','banana.png','raspberry.png']
+		self.listOfFruitImages=['strawberry.png','banana.png','raspberry.png','blueberry.png']
 		self.listOfVegetableImages = ['potato.png', 'onion.png']
-		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png','raspberryfrozen.png']
+		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png','raspberryfrozen.png','blueberryfrozen.png']
 		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png']
 		self.goldenImage = 'pineapple.png'
 		self.frozenGoldImage = 'pineapplefrozen.png'
