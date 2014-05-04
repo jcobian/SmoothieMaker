@@ -64,7 +64,7 @@ class GameSpace:
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
-		
+
 		#create the blender object that represents you
 		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber,playerType='user')
 
@@ -94,7 +94,7 @@ class GameSpace:
 		self.gameLabels.append(self.scoreLabel)
 		self.gameLabels.append(self.scoreLabelOpponent)
 		self.gameLabels.append(self.youLabel)
-		self.gameLabels.append(oppLabel)
+		self.gameLabels.append(self.oppLabel)
 
 		
 
