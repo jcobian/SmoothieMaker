@@ -102,10 +102,10 @@ class FruitConn(protocol.Protocol):
 		try:
 			comp = data.split(':')
 			fruitInt = int(comp[1])
-			xpos = str(comp[2])
-			vspeed = str(comp[3])
+			xpos = int(comp[2])
+			vspeed = int(comp[3])
 			foodType = comp[4]
-			fruitID = str(comp[5])
+			fruitID = int(comp[5])
 			freezeString=comp[6]
 			print 'got here'
 			#fruitData = pickle.loads(comp[1])
