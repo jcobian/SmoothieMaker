@@ -88,6 +88,7 @@ class FruitConn(protocol.Protocol):
 			self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 			self.transport.write('added fruit:'+str(self.playerNumber))
 		except:
+			print comp
 			self.readyForMore()
 
 			 
