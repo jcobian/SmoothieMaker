@@ -26,7 +26,7 @@ class GameSpace:
 
 		self.score = 0
 		self.opponentScore = 0
-		self.winningScore = 100 
+		self.winningScore = 200 
 
 		self.size = self.width, self.height = 1280,800
 		self.black = 0,0,0
