@@ -217,14 +217,11 @@ class GameSpace:
 
 		if self.score > self.winningScore:
 			self.score = self.winningScore
-		self.checkIfWon()
 	def subFromScore(self):
 		self.score-=20
 		if self.score < 0:
 			self.score = 0
-	def checkIfWon(self):
-		if self.score >= self.winningScore:
-			print 'won'
+	
 	def freezeFruits(self,mx,my):
 		for fruit in self.fruits:
 			if fruit.rect.collidepoint(mx,my):
