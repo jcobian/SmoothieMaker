@@ -112,11 +112,11 @@ class FruitConn(protocol.Protocol):
 			if len(freezeString)!=0:
 				print 'GOOD'
 				#print fruitData.freezeString
-				self.handleData(fruitData.freezeString)
+				self.handleData(freezeString)
 				self.transport.write('froze fruit:'+str(self.playerNumber))
 			else:
 				#print 'add fruit'
-				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
+				self.gs.addFruit(fruitInt,xpos,vspeed,foodType,fruitID)
 				self.transport.write('added fruit:'+str(self.playerNumber))
 			
 		except Exception as ex:
