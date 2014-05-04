@@ -6,6 +6,7 @@ class FruitData():
 			self.vspeed = vspeed
 			self.foodType = foodType
 			self.fruitID = fruitID
+			self.dataType = dataType
 		elif dataType=='freeze':
 			self.freezeString = freezeString
 
