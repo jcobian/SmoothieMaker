@@ -97,6 +97,7 @@ class FruitConn(protocol.Protocol):
 			fruitData = pickle.loads(comp[1])
 			if len(fruitData.freezeString)!=0:
 				self.handleData(fruitData.freezeString)
+				self.transport.write('froze fruit:'+str(self.playerNumber))
 			else:
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 				self.transport.write('added fruit:'+str(self.playerNumber))
