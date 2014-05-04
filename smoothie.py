@@ -42,22 +42,7 @@ class GameSpace:
 		self.point1 = self.width/2,0
 		self.point2 = self.width/2,self.height
 
-		#create the blender object that represents you
-		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber,playerType='user')
-
-		opponentPlayerNumber = 1
-		if self.playerNumber == 1:
-			opponentPlayerNumber = 2
-
-		#create the blender object that represents your opponent
-		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber,playerType='opponent')
-
-		self.scoreLabel = ScoreLabel(self,playerType='user')
-		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
-
-		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=40,size=50)
-		self.oppLabel = PlayerLabel(self,textLabel="Opponent",xpos=3*self.width/4,ypos=40,size=50)
-	
+		
 		
 
 		self.counter = 0
@@ -79,6 +64,27 @@ class GameSpace:
 		
 		#2 set up game objects
 		self.clock = pygame.time.Clock()
+		
+		#create the blender object that represents you
+		self.blender = Blender(self,hspeed=7.0,playerNumber=self.playerNumber,playerType='user')
+
+		opponentPlayerNumber = 1
+		if self.playerNumber == 1:
+			opponentPlayerNumber = 2
+
+		#create the blender object that represents your opponent
+		self.opponent = Blender(self,hspeed=7.0,playerNumber=opponentPlayerNumber,playerType='opponent')
+
+		self.scoreLabel = ScoreLabel(self,playerType='user')
+		self.scoreLabelOpponent = ScoreLabel(self,playerType='opponent')
+
+		self.youLabel = PlayerLabel(self,textLabel="You",xpos=self.width/4,ypos=40,size=50)
+		self.oppLabel = PlayerLabel(self,textLabel="Opponent",xpos=3*self.width/4,ypos=40,size=50)
+	
+
+
+
+
 
 		self.gameObjectsList = list()
 		self.gameObjectsList.append(self.blender)
