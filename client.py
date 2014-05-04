@@ -31,7 +31,6 @@ class FruitConn(protocol.Protocol):
 
 	def freezeRightFruit(self,fruitID):
 		print 'freeze right fruit called'
-	
 		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
 		fruitData = FruitData(freezeString=freezeString)
 		print fruitData.freezeString
