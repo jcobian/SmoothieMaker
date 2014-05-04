@@ -11,9 +11,10 @@ from playerLabel import PlayerLabel
 from fruitdata import FruitData
 #main gamespace where the overarching game structure is
 class GameSpace:
-	def __init__(self,commandConn,playerNumber,randSeed):
+	def __init__(self,fruitConn,playerNumber,randSeed):
 		#reference to the connection to the server
-		self.commandConn = commandConn
+		self.fruitConn = fruitConn
+
 		self.playerNumber = playerNumber
 		random.seed(randSeed)
 
@@ -101,12 +102,12 @@ class GameSpace:
 	def gameLoopIteration(self):
 		#if you or opponent won, stop the looping call and tell the connection which will generate a new looping call
 		if self.score >= self.winningScore:
-			self.commandConn.lc.stop()
-			self.commandConn.gameOver('You Won')
+			self.fruitConn.lc.stop()
+			self.fruitConn.gameOver('You Won')
 			return 0
 		elif self.opponentScore >= self.winningScore:
-			self.commandConn.lc.stop()
-			self.commandConn.gameOver('Opponent Won')
+			self.fruitConn.lc.stop()
+			self.fruitConn.gameOver('Opponent Won')
 			return 0
 		#otherwise game is not over
 		else:
@@ -136,9 +137,9 @@ class GameSpace:
 				#create the fruit
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
 				#create the data you want to pickle over to the other player so he has the same fruit
-				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID,freezeString='')
+				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID)
 				#add the fruit data over to connection's queue so it can send it over to server (then to other player)
-				self.commandConn.fruitQueue.put(fruitData)
+				self.fruitConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
 			#every 3 seconds generate a veggie, do same thing as above
 			elif self.current_ticks %180 == 0:
@@ -152,8 +153,8 @@ class GameSpace:
 				self.fruitID = self.counter
 				self.counter+=1
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
-				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID,freezeString='')
-				self.commandConn.fruitQueue.put(fruitData)
+				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID)
+				self.fruitConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
 
 			
@@ -168,8 +169,8 @@ class GameSpace:
 					self.freezeFruits(mx,my)
 				elif event.type == pygame.QUIT:
 					pygame.display.quit()
-					self.commandConn.lc.stop()
-					self.commandConn.closeConn()
+					self.fruitConn.lc.stop()
+					self.fruitConn.closeConn()
 					return 1
 
 			#6 send a tick to every game object
@@ -216,8 +217,8 @@ class GameSpace:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.display.quit()
-				self.commandConn.lc.stop()
-				self.commandConn.closeConn()
+				self.fruitConn.lc.stop()
+				self.fruitConn.closeConn()
 				return 1
 
 		self.screen.blit(winnerLabel.label,winnerLabel.rect)
@@ -257,12 +258,13 @@ class GameSpace:
 		for fruit in self.fruits:
 			if fruit.rect.collidepoint(mx,my):
 				fruit.freezeFruit()
-				self.commandConn.freezeRightFruit(fruit.fruitID)
+				self.fruitConn.freezeRightFruit(fruit.fruitID)
 
 		for fruit in self.fruitsOpp:
 			if fruit.rect.collidepoint(mx,my):
 				fruit.freezeFruit()
-				self.commandConn.freezeLeftFruit(fruit.fruitID)
+				self.fruitConn.freezeLeftFruit(fruit.fruitID)
+
 	#freezes a fruit w/ given id
 	def freezeLeftFruitWithID(self,fruitID):
 		for fruit in self.fruits:

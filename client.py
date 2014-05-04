@@ -14,7 +14,15 @@ class Client():
 		self.blenderConn = None
 		reactor.connectTCP(self.host,self.blenderPort,BlenderConnFactory(self))
 		reactor.connectTCP(self.host,self.fruitPort,FruitConnFactory(self))
+
 		reactor.run()
+
+
+
+
+
+			 
+	
 
 
 class FruitConn(protocol.Protocol):
@@ -23,32 +31,12 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue = DeferredQueue()
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
-	def freezeLeftFruit(self,fruitID):
-		freezeString = 'Freeze,'+str(self.playerNumber)+','+str(fruitID)+',left'
-		fruitData = FruitData(fruitInt=-1,xpos=-1,vspeed=-1,foodType='',fruitID=-1,freezeString=freezeString)
-		self.fruitQueue.put(fruitData)
-		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
-
-	def freezeRightFruit(self,fruitID):
-		print 'freeze right fruit called'
-		freezeString = 'Freeze,'+str(self.playerNumber)+','+str(fruitID)+',right'
-		fruitData = FruitData(fruitInt=-1,xpos=-1,vspeed=-1,foodType='',fruitID=-1,freezeString=freezeString)
-		print fruitData.freezeString
-		self.fruitQueue.put(fruitData)
-		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
-
-	def sendMyData(self,fruitData):
-			if len(fruitData.freezeString) != 0:
-				print 'sending freeze string to:',fruitData.freezeString
-			#datapd =  pickle.dumps(fruitData)
-			#theString = str(self.playerNumber)+':'+datapd
-			data = fruitData.toString()
-			theString = str(self.playerNumber)+':'+data
-
+	def sendMyData(self,fruitData):	
+			datapd =  pickle.dumps(fruitData)
+			theString = str(self.playerNumber)+':'+datapd
 			self.transport.write(theString)
 
-	def readyForMore(self):
-		self.fruitQueue.get().addCallback(self.sendMyData)
+
 	
 		
 	def connectionMade(self):
@@ -74,65 +62,67 @@ class FruitConn(protocol.Protocol):
 				print 'Game Started: You are the Pink Player'
 			else:
 				print 'Game Started: You are the Green Player'
+
 			self.gs = GameSpace(self,self.playerNumber,self.randSeed)
 			self.client.blenderConn.gs = self.gs
 			self.gs.main()
 			self.lc = LoopingCall(self.gs.gameLoopIteration)
 			self.lc.start(1/60)
 			self.client.blenderConn.sendMyData()
-
 		elif data == 'ready for more':
 			self.readyForMore()
-		elif data.startswith('Freeze'):
-			print 'SHOULD NEVER HAPPEN'
-			handleFreeze(data)
 		else:
 			self.parseData(data)
 
-	def handleData(self,data):
-		print 'handle data'
-		comp = data.split(',')
-		print comp
-		fruitID = int(comp[2])
-		freezeType = comp[3]
-		if freezeType == 'left':
-			self.gs.freezeLeftFruitWithID(fruitID)
-		else:
-			self.gs.freezeRightWithID(fruitID)
+
+
 
 	def parseData(self,data):
 		try:
 			comp = data.split(':')
-			fruitInt = int(comp[1])
-			xpos = int(comp[2])
-			vspeed = int(comp[3])
-			foodType = comp[4]
-			fruitID = int(comp[5])
-			freezeString = ''
-			if len(comp) >=7:
-				freezeString=comp[6]
-				print 'Good:',freezeString
-
-			#fruitData = pickle.loads(comp[1])
-			if len(freezeString)!=0:
-				print 'GOOD'
-				self.handleData(freezeString)
-				self.transport.write('froze fruit:'+str(self.playerNumber))
+			fruitData = pickle.loads(comp[1])
+			if fruitData.dataType == 'create':
+				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 			else:
-				#print 'add fruit'
-				self.gs.addFruit(fruitInt,xpos,vspeed,foodType,fruitID)
-				self.transport.write('added fruit:'+str(self.playerNumber))
+				self.handleFreezeData(fruitData.freezeString)
+			self.fruitQueue.get().addCallback(self.sendMyData)
+			#self.transport.write('finished fruit data:'+str(self.playerNumber))
 			
 		except Exception as ex:
 			print 'Error!'
 			print str(ex)
 			print comp
-			#self.readyForMore()
 
 			 
+
+
+	def handleFreezeData(self,data):
+		comp = data.split(':')
+		fruitID = comp[1]
+		direction = comp[2]
+		print 'Will freeze id:',fruitID,'on the ',direction
+		if direction == 'left':
+			self.gs.freezeLeftFruitWithID(fruitID)
+		else:
+			self.gs.freezeRightWithID(fruitID)
+
 	def gameOver(self,text):
 		self.lc = LoopingCall(self.gs.goToGameOver,(text))
 		self.lc.start(1/60)
+
+
+	def freezeLeftFruit(self,fruitID):
+		print 'Player ',str(self.playerNumber),'clicked right, to freeze other left fruit'
+		freezeString = str(self.playerNumber)+':'+str(fruitID)+':left'
+		fruitData = FruitData(dataType='freeze',freezeString=freezeString)
+		self.fruitQueue.put(fruitData)
+
+	def freezeRightFruit(self,fruitID):
+		print 'Player ',str(self.playerNumber),'clicked left, to freeze other right fruit'
+		freezeString = str(self.playerNumber)+':'+str(fruitID)+':right'
+		fruitData = FruitData(dataType='freeze',freezeString=freezeString)
+		self.fruitQueue.put(fruitData)
+
 
 
 
@@ -176,7 +166,6 @@ class BlenderConn(protocol.Protocol):
 		
 
 	
-
 
 class FruitConnFactory(protocol.ClientFactory):
 	def __init__(self,client):
