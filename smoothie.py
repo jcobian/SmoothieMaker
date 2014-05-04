@@ -17,6 +17,8 @@ class GameSpace:
 		self.listOfVegetableImages = ['potato.png', 'onion.png']
 		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png','raspberryfrozen.png']
 		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png']
+		self.goldenImage = 'pineapple.png'
+		self.frozenGoldImage = 'pineapplefrozen.png'
 		self.playerNumber = playerNumber
 
 		self.fruits = list()
@@ -107,7 +109,12 @@ class GameSpace:
 		else:
 			if self.current_ticks%120 == 0:
 				self.foodType = 'fruit'
-				randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
+				goldRandNum = random.randint(0,9)
+				if goldRandNum == 0:
+					randFruitInt = -1
+				else:
+					randFruitInt = random.randint(0,len(self.listOfFruitImages)-1)
+
 				self.randFruitInt = randFruitInt
 				xpos = random.randint(0,self.width/2)
 				self.randXPos = xpos
@@ -203,8 +210,11 @@ class GameSpace:
 		self.opponent.rect = self.opponent.rect.move(self.width/2,0)
 		self.opponent.colliderect = self.opponent.rect.inflate(-self.opponent.rect.width*.18,-self.opponent.rect.height*.9)
 		self.opponent.colliderect = self.opponent.colliderect.move((-self.opponent.rect.width*.18)/2,(-self.opponent.rect.height*.9)/2)
-	def addToScore(self):
+	def addToScore(self,double=False):
 		self.score+=10
+		if double == True:
+			self.score*=2
+
 		if self.score > self.winningScore:
 			self.score = self.winningScore
 		self.checkIfWon()

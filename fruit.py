@@ -11,8 +11,13 @@ class Fruit(pygame.sprite.Sprite):
 		#load a random image
 		self.randFruitInt = randFruitInt
 		if self.type == 'fruit':
-			self.fruitImage = self.gs.listOfFruitImages[self.randFruitInt]
-			frozenImage = self.gs.listOfFrozenFruitImages[self.randFruitInt]
+			
+			if self.randFruitInt == -1:
+				self.fruitImage = self.gs.goldenImage
+				frozenImage = self.gs.frozenGoldImage
+			else:	
+				self.fruitImage = self.gs.listOfFruitImages[self.randFruitInt]
+				frozenImage = self.gs.listOfFrozenFruitImages[self.randFruitInt]
 
 		elif self.type == 'vegetable':
 			self.fruitImage = self.gs.listOfVegetableImages[self.randFruitInt]

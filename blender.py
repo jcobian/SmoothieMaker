@@ -44,7 +44,10 @@ class Blender(pygame.sprite.Sprite):
 				self.gs.fruits.pop(index)
 
 				if food.type == 'fruit':
-					self.gs.addToScore()
+					if food.randFruitInt == -1:
+						self.gs.addToScore(double=True)
+					else:
+						self.gs.addToScore()
 				elif food.type == 'vegetable':
 					self.gs.subFromScore()
 		else:
