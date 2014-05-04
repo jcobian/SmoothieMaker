@@ -24,14 +24,24 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeLeftFruit(self,fruitID):
-		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':left'
+		sendTo = 1
+		if self.playerNumber == 1:
+			sendTo = 2
+		else:
+			sendTo = 1
+		freezeString = 'Freeze:'+str(sendTo)+':'+str(fruitID)+':left'
 		fruitData = FruitData(freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeRightFruit(self,fruitID):
 		print 'freeze right fruit called'
-		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
+		sendTo = 1
+		if self.playerNumber == 1:
+			sendTo = 2
+		else:
+			sendTo = 1
+		freezeString = 'Freeze:'+str(sendTo)+':'+str(fruitID)+':right'
 		fruitData = FruitData(freezeString=freezeString)
 		print fruitData.freezeString
 		self.fruitQueue.put(fruitData)
@@ -39,7 +49,7 @@ class FruitConn(protocol.Protocol):
 
 	def sendMyData(self,fruitData):
 			if len(fruitData.freezeString) != 0:
-				print 'sending freeze string:',fruitData.freezeString
+				print 'sending freeze string to:',fruitData.freezeString
 			datapd =  pickle.dumps(fruitData)
 			theString = str(self.playerNumber)+':'+datapd
 			self.transport.write(theString)
