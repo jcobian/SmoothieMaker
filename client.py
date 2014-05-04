@@ -24,14 +24,14 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeLeftFruit(self,fruitID):
-		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':left'
+		freezeString = 'Freeze,'+str(self.playerNumber)+','+str(fruitID)+',left'
 		fruitData = FruitData(fruitInt=-1,xpos=-1,vspeed=-1,foodType='',fruitID=-1,freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeRightFruit(self,fruitID):
 		print 'freeze right fruit called'
-		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
+		freezeString = 'Freeze,'+str(self.playerNumber)+','+str(fruitID)+',right'
 		fruitData = FruitData(fruitInt=-1,xpos=-1,vspeed=-1,foodType='',fruitID=-1,freezeString=freezeString)
 		print fruitData.freezeString
 		self.fruitQueue.put(fruitData)
@@ -40,8 +40,11 @@ class FruitConn(protocol.Protocol):
 	def sendMyData(self,fruitData):
 			if len(fruitData.freezeString) != 0:
 				print 'sending freeze string to:',fruitData.freezeString
-			datapd =  pickle.dumps(fruitData)
-			theString = str(self.playerNumber)+':'+datapd
+			#datapd =  pickle.dumps(fruitData)
+			#theString = str(self.playerNumber)+':'+datapd
+			data = fruitData.toString()
+			theString = str(self.playerNumber)+':'+data
+
 			self.transport.write(theString)
 
 	def readyForMore(self):
@@ -87,7 +90,7 @@ class FruitConn(protocol.Protocol):
 			self.parseData(data)
 
 	def handleData(self,data):
-		comp = data.split(':')
+		comp = data.split(',')
 		fruitID = int(comp[2])
 		freezeType = comp[3]
 		if freezeType == 'left':
@@ -98,16 +101,24 @@ class FruitConn(protocol.Protocol):
 	def parseData(self,data):
 		try:
 			comp = data.split(':')
-			fruitData = pickle.loads(comp[1])
-			if len(fruitData.freezeString)!=0:
+			fruitInt = int(comp[1])
+			xpos = str(comp[2])
+			vspeed = str(comp[3])
+			foodType = comp[4]
+			fruitID = str(comp[5])
+			freezeString=comp[6]
+			
+			#fruitData = pickle.loads(comp[1])
+			if len(freezeString)!=0:
 				print 'GOOD'
-				print fruitData.freezeString
+				#print fruitData.freezeString
 				self.handleData(fruitData.freezeString)
 				self.transport.write('froze fruit:'+str(self.playerNumber))
 			else:
 				#print 'add fruit'
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 				self.transport.write('added fruit:'+str(self.playerNumber))
+			
 		except Exception as ex:
 			print 'Error!'
 			print str(ex)
