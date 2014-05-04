@@ -136,7 +136,7 @@ class GameSpace:
 				#create the fruit
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
 				#create the data you want to pickle over to the other player so he has the same fruit
-				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID)
+				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID,freezeString='')
 				#add the fruit data over to connection's queue so it can send it over to server (then to other player)
 				self.commandConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
@@ -152,7 +152,7 @@ class GameSpace:
 				self.fruitID = self.counter
 				self.counter+=1
 				fruitToAdd = Fruit(self,type=self.foodType,xpos=xpos,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
-				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID)
+				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID,freezeString='')
 				self.commandConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
 

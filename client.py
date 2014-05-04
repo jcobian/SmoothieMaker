@@ -25,14 +25,14 @@ class FruitConn(protocol.Protocol):
 
 	def freezeLeftFruit(self,fruitID):
 		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':left'
-		fruitData = FruitData(freezeString=freezeString)
+		fruitData = FruitData(fruitInt=-1,xpos=-1,vspeed=-1,foodType='',fruitID=-1,freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeRightFruit(self,fruitID):
 		print 'freeze right fruit called'
 		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
-		fruitData = FruitData(freezeString=freezeString)
+		fruitData = FruitData(fruitInt=-1,xpos=-1,vspeed=-1,foodType='',fruitID=-1,freezeString=freezeString)
 		print fruitData.freezeString
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
