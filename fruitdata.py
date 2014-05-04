@@ -8,7 +8,6 @@ class FruitData():
 			self.fruitID = fruitID
 			self.dataType = dataType
 		elif dataType=='freeze':
-			self.freezeString = freezeString
 			self.freezeDirection = freezeDirection
 			self.freezeID = freezeID
 
