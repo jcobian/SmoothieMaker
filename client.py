@@ -24,24 +24,15 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeLeftFruit(self,fruitID):
-		sendTo = 1
-		if self.playerNumber == 1:
-			sendTo = 2
-		else:
-			sendTo = 1
-		freezeString = 'Freeze:'+str(sendTo)+':'+str(fruitID)+':left'
+		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':left'
 		fruitData = FruitData(freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeRightFruit(self,fruitID):
 		print 'freeze right fruit called'
-		sendTo = 1
-		if self.playerNumber == 1:
-			sendTo = 2
-		else:
-			sendTo = 1
-		freezeString = 'Freeze:'+str(sendTo)+':'+str(fruitID)+':right'
+	
+		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
 		fruitData = FruitData(freezeString=freezeString)
 		print fruitData.freezeString
 		self.fruitQueue.put(fruitData)
@@ -118,8 +109,9 @@ class FruitConn(protocol.Protocol):
 				#print 'add fruit'
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 				self.transport.write('added fruit:'+str(self.playerNumber))
-		except:
+		except Exception as ex:
 			print 'Error!'
+			print str(ex)
 			print comp
 			#self.readyForMore()
 
