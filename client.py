@@ -23,7 +23,6 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeFruit(self,fruitID):
-		print 'sending',fruitID
 		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID))
 
 	def sendMyData(self,fruitData):
@@ -38,13 +37,13 @@ class FruitConn(protocol.Protocol):
 		
 	def connectionMade(self):
 		self.client.fruitConn = self
-		self.transport.write('connect')
+		print 'Connection succesfully made to the server'
+		self.transport.write('start')
 
 	def closeConn(self):
 		reactor.stop()
 
 	def dataReceived(self,data):
-
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
 		elif data == 'lost conn':
@@ -55,7 +54,10 @@ class FruitConn(protocol.Protocol):
 			self.playerNumber = int(comp[1])
 			self.randSeed = int(comp[2])
 			self.client.blenderConn.playerNumber = self.playerNumber
-			print 'Game Started: You are Player',self.playerNumber
+			if self.playerNumber == 1:
+				print 'Game Started: You are the Pink Player'
+			else:
+				print 'Game Started: You are the Green Player'
 			self.gs = GameSpace(self,self.playerNumber,self.randSeed)
 			self.client.blenderConn.gs = self.gs
 			self.gs.main()
@@ -66,7 +68,6 @@ class FruitConn(protocol.Protocol):
 		elif data == 'ready for more':
 			self.readyForMore()
 		elif data.startswith('Freeze'):
-			print 'receive',data
 			comp = data.split(':')
 			fruitID = int(comp[2])
 			self.gs.freezeFruitWithID(fruitID)
