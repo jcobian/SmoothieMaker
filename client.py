@@ -23,6 +23,7 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeFruit(self,fruitID):
+		print 'sending',fruitID
 		self.transport.write('Freeze:'+str(fruitID))
 
 	def sendMyData(self,fruitData):
@@ -65,6 +66,7 @@ class FruitConn(protocol.Protocol):
 		elif data == 'ready for more':
 			self.readyForMore()
 		elif data.startswith('Freeze'):
+			print 'receive',data
 			comp = data.split(':')
 			fruitID = int(data[1])
 			self.gs.freezeFruitWithID(fruitID)
