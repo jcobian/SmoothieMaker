@@ -32,15 +32,16 @@ class FruitConn(protocol.Protocol):
 	def freezeRightFruit(self,fruitID):
 		print 'freeze right fruit called'
 		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
-		print freezeString
 		fruitData = FruitData(freezeString=freezeString)
+		print fruitData.freezeString
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
 
 	def sendMyData(self,fruitData):
+			if len(fruitData.freezeString) != 0:
+				print 'sending freeze string:',fruitData.freezeString
 			datapd =  pickle.dumps(fruitData)
 			theString = str(self.playerNumber)+':'+datapd
-			comp = theString.split(':')
 			self.transport.write(theString)
 
 	def readyForMore(self):
@@ -80,6 +81,7 @@ class FruitConn(protocol.Protocol):
 		elif data == 'ready for more':
 			self.readyForMore()
 		elif data.startswith('Freeze'):
+			print 'SHOULD NEVER HAPPEN'
 			handleFreeze(data)
 		else:
 			self.parseData(data)
@@ -98,7 +100,7 @@ class FruitConn(protocol.Protocol):
 			comp = data.split(':')
 			fruitData = pickle.loads(comp[1])
 			if len(fruitData.freezeString)!=0:
-				print 'freeze fruit!'
+				print 'GOOD'
 				print fruitData.freezeString
 				self.handleData(fruitData.freezeString)
 				self.transport.write('froze fruit:'+str(self.playerNumber))
