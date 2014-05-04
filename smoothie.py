@@ -227,9 +227,7 @@ class GameSpace:
 	#adds a fruit to your screen, this is a fruit sent over by your opponent which he generated
 	def addFruit(self,fruitInt,xpos,vspeed,foodType,iD):
 		xpos+=self.width/2
-		print 'before creaet'
 		food = Fruit(self,type=foodType,xpos=xpos,randFruitInt=fruitInt,vspeed=vspeed,fruitID=iD,side='right')
-		print 'after create'
 		self.fruitsOpp.append(food)
 
 
