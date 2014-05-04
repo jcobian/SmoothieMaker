@@ -4,6 +4,7 @@ import sys
 import pickle
 from smoothie import GameSpace
 from twisted.internet.defer import DeferredQueue
+from fruitdata import FruitData
 class Client():
 	def __init__(self,host,fruitPort,blenderPort):
 		self.host = host
@@ -23,19 +24,22 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeFruit(self,fruitID):
-		self.fruitQueue.put('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
+		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm'
+		fruitData = FruitData(freezeString=freezeString)
+		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeOppFruit(self,fruitID):
-		self.fruitQueue.put('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
+		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp'
+		fruitData = FruitData(freezeString=freezeString)
+		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
 
 	def sendMyData(self,fruitData):
-		print fruitData
-		datapd =  pickle.dumps(fruitData)
-		theString = str(self.playerNumber)+':'+datapd
-		comp = theString.split(':')
-		self.transport.write(theString)
+			datapd =  pickle.dumps(fruitData)
+			theString = str(self.playerNumber)+':'+datapd
+			comp = theString.split(':')
+			self.transport.write(theString)
 
 	def readyForMore(self):
 		self.fruitQueue.get().addCallback(self.sendMyData)
@@ -74,23 +78,30 @@ class FruitConn(protocol.Protocol):
 		elif data == 'ready for more':
 			self.readyForMore()
 		elif data.startswith('Freeze'):
-			comp = data.split(':')
-			fruitID = int(comp[2])
-			freezeType = comp[3]
-			if freezeType == 'opp':
-				self.gs.freezeOpponentFruitWithID(fruitID)
-			else:
-				self.gs.freezeFruitWithID(fruitID)
+			handleFreeze(data)
 		else:
 			self.parseData(data)
+
+	def handleData(self,data):
+		comp = data.split(':')
+		fruitID = int(comp[2])
+		freezeType = comp[3]
+		if freezeType == 'opp':
+			self.gs.freezeOpponentFruitWithID(fruitID)
+		else:
+			self.gs.freezeFruitWithID(fruitID)
 
 	def parseData(self,data):
 		try:
 			comp = data.split(':')
 			fruitData = pickle.loads(comp[1])
-			self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
-			self.transport.write('added fruit:'+str(self.playerNumber))
+			if len(fruitData.freezeString)!=0:
+				self.handleData(fruitData.freezeString)
+			else:
+				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
+				self.transport.write('added fruit:'+str(self.playerNumber))
 		except:
+			print 'ERROR'
 			print comp
 			self.readyForMore()
 
