@@ -23,14 +23,14 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue = DeferredQueue()
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
-	def freezeFruit(self,fruitID):
-		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm'
+	def freezeLeftFruit(self,fruitID):
+		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':left'
 		fruitData = FruitData(freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
-	def freezeOppFruit(self,fruitID):
-		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp'
+	def freezeRightFruit(self,fruitID):
+		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
 		fruitData = FruitData(freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
@@ -86,25 +86,27 @@ class FruitConn(protocol.Protocol):
 		comp = data.split(':')
 		fruitID = int(comp[2])
 		freezeType = comp[3]
-		if freezeType == 'opp':
-			self.gs.freezeOpponentFruitWithID(fruitID)
+		if freezeType == 'left':
+			self.gs.freezeLeftFruitWithID(fruitID)
 		else:
-			self.gs.freezeFruitWithID(fruitID)
+			self.gs.freezeRightWithID(fruitID)
 
 	def parseData(self,data):
 		try:
 			comp = data.split(':')
 			fruitData = pickle.loads(comp[1])
 			if len(fruitData.freezeString)!=0:
+				print 'freeze fruit'
 				self.handleData(fruitData.freezeString)
 				self.transport.write('froze fruit:'+str(self.playerNumber))
 			else:
+				print 'add fruit'
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 				self.transport.write('added fruit:'+str(self.playerNumber))
 		except:
-			print 'ERROR'
+			print 'Error!'
 			print comp
-			self.readyForMore()
+			#self.readyForMore()
 
 			 
 	def gameOver(self,text):
