@@ -255,18 +255,18 @@ class GameSpace:
 		for fruit in self.fruits:
 			if fruit.rect.collidepoint(mx,my):
 				fruit.freezeFruit()
-				self.commandConn.freezeOppFruit(fruit.fruitID)
+				self.commandConn.freezeRightFruit(fruit.fruitID)
 
 		for fruit in self.fruitsOpp:
 			if fruit.rect.collidepoint(mx,my):
 				fruit.freezeFruit()
-				self.commandConn.freezeFruit(fruit.fruitID)
+				self.commandConn.freezeLeftFruit(fruit.fruitID)
 	#freezes a fruit w/ given id
-	def freezeFruitWithID(self,fruitID):
+	def freezeLeftFruitWithID(self,fruitID):
 		for fruit in self.fruits:
 			if fruit.fruitID == fruitID:
 				fruit.freezeFruit()
-	def freezeOpponentFruitWithID(self,fruitID):
+	def freezeRightFruitWithID(self,fruitID):
 		for fruit in self.fruitsOpp:
 			if fruit.fruitID == fruitID:
 				fruit.freezeFruit()
