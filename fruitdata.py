@@ -6,3 +6,6 @@ class FruitData():
 		self.foodType = foodType
 		self.fruitID = fruitID
 		self.freezeString = freezeString
+
+	def toString(self):
+			return str(self.fruitInt) + ":" + str(self.xpos) + ":" + str(self.vspeed) + ":" + self.foodType + ":" + str(self.fruitID) + ":" + self.freezeString
