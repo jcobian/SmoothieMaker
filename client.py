@@ -81,6 +81,7 @@ class FruitConn(protocol.Protocol):
 			if fruitData.dataType == 'create':
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 			else:
+				print 'Will freeze on ',fruitData.freezeDirection
 				if fruitData.freezeDirection == 'left':
 					self.gs.freezeLeftFruitWithID(fruitData.freezeID)
 				else:
