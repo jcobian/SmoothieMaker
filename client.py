@@ -90,7 +90,9 @@ class FruitConn(protocol.Protocol):
 			self.parseData(data)
 
 	def handleData(self,data):
+		print 'handle data'
 		comp = data.split(',')
+		print comp
 		fruitID = int(comp[2])
 		freezeType = comp[3]
 		if freezeType == 'left':
@@ -109,19 +111,16 @@ class FruitConn(protocol.Protocol):
 			freezeString = ''
 			if len(comp) >=7:
 				freezeString=comp[6]
+				print 'Good:',freezeString
 
-			print 'got here'
 			#fruitData = pickle.loads(comp[1])
 			if len(freezeString)!=0:
 				print 'GOOD'
-				#print fruitData.freezeString
 				self.handleData(freezeString)
 				self.transport.write('froze fruit:'+str(self.playerNumber))
 			else:
-				print 'here'
 				#print 'add fruit'
 				self.gs.addFruit(fruitInt,xpos,vspeed,foodType,fruitID)
-				print 'and here'
 				self.transport.write('added fruit:'+str(self.playerNumber))
 			
 		except Exception as ex:
