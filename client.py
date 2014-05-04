@@ -30,7 +30,9 @@ class FruitConn(protocol.Protocol):
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeRightFruit(self,fruitID):
+		print 'freeze right fruit called'
 		freezeString = 'Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':right'
+		print freezeString
 		fruitData = FruitData(freezeString=freezeString)
 		self.fruitQueue.put(fruitData)
 		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
@@ -96,11 +98,12 @@ class FruitConn(protocol.Protocol):
 			comp = data.split(':')
 			fruitData = pickle.loads(comp[1])
 			if len(fruitData.freezeString)!=0:
-				print 'freeze fruit'
+				print 'freeze fruit!'
+				print fruitData.freezeString
 				self.handleData(fruitData.freezeString)
 				self.transport.write('froze fruit:'+str(self.playerNumber))
 			else:
-				print 'add fruit'
+				#print 'add fruit'
 				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
 				self.transport.write('added fruit:'+str(self.playerNumber))
 		except:
