@@ -23,12 +23,15 @@ class FruitConn(protocol.Protocol):
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
 	def freezeFruit(self,fruitID):
-		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
+		self.fruitQueue.put('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
+		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':norm')
 
 	def freezeOppFruit(self,fruitID):
-		self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
+		self.fruitQueue.put('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
+		#self.transport.write('Freeze:'+str(self.playerNumber)+':'+str(fruitID)+':opp')
 
 	def sendMyData(self,fruitData):
+		print fruitData
 		datapd =  pickle.dumps(fruitData)
 		theString = str(self.playerNumber)+':'+datapd
 		comp = theString.split(':')
