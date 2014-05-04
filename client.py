@@ -68,7 +68,7 @@ class FruitConn(protocol.Protocol):
 		elif data.startswith('Freeze'):
 			print 'receive',data
 			comp = data.split(':')
-			fruitID = int(data[1])
+			fruitID = int(comp[1])
 			self.gs.freezeFruitWithID(fruitID)
 		else:
 			self.parseData(data)
