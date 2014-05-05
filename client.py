@@ -1,5 +1,6 @@
 from twisted.internet import protocol,reactor
 from twisted.internet.task import LoopingCall
+from twisted.protocols.basic import LineReceiver
 import sys
 import pickle
 from smoothie import GameSpace
@@ -25,7 +26,7 @@ class Client():
 	
 
 
-class FruitConn(protocol.Protocol):
+class FruitConn(LineReceiver):
 	def __init__(self,client):
 		self.client = client
 		self.fruitQueue = DeferredQueue()
@@ -35,6 +36,7 @@ class FruitConn(protocol.Protocol):
 			datapd =  pickle.dumps(fruitData)
 			theString = str(self.playerNumber)+':'+datapd
 			self.transport.write(theString)
+			#self.fruitQueue.get().addCallback(self.sendMyData)
 		
 	def connectionMade(self):
 		self.client.fruitConn = self
@@ -44,7 +46,7 @@ class FruitConn(protocol.Protocol):
 	def closeConn(self):
 		reactor.stop()
 
-	def dataReceived(self,data):
+	def lineReceived(self,data):
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
 		elif data == 'lost conn':
@@ -66,8 +68,6 @@ class FruitConn(protocol.Protocol):
 			self.lc = LoopingCall(self.gs.gameLoopIteration)
 			self.lc.start(1/60)
 			self.client.blenderConn.sendMyData()
-		elif data == 'ready for more':
-			self.readyForMore()
 		else:
 			self.parseData(data)
 
@@ -86,7 +86,7 @@ class FruitConn(protocol.Protocol):
 					self.gs.freezeLeftFruitWithID(fruitData.freezeID)
 				else:
 					self.gs.freezeRightFruitWithID(fruitData.freezeID)
-			self.fruitQueue.get().addCallback(self.sendMyData)
+			#self.fruitQueue.get().addCallback(self.sendMyData)
 			#self.transport.write('finished fruit data:'+str(self.playerNumber))
 			
 		except Exception as ex:
