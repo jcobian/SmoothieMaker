@@ -37,7 +37,7 @@ class FruitConn(LineReceiver):
 			theString = str(self.playerNumber)+':'+datapd
 			self.sendLine(theString)
 			#self.transport.write(theString)
-			#self.fruitQueue.get().addCallback(self.sendMyData)
+			self.fruitQueue.get().addCallback(self.sendMyData)
 		
 	def connectionMade(self):
 		self.client.fruitConn = self
