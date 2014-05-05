@@ -35,13 +35,15 @@ class FruitConn(LineReceiver):
 	def sendMyData(self,fruitData):	
 			datapd =  pickle.dumps(fruitData)
 			theString = str(self.playerNumber)+':'+datapd
-			self.transport.write(theString)
+			self.sendLine(theString)
+			#self.transport.write(theString)
 			#self.fruitQueue.get().addCallback(self.sendMyData)
 		
 	def connectionMade(self):
 		self.client.fruitConn = self
 		print 'Connection succesfully made to the server'
-		self.transport.write('start')
+		self.sendLine('start')
+		#self.transport.write('start')
 
 	def closeConn(self):
 		reactor.stop()
