@@ -165,8 +165,11 @@ class GameSpace:
 				#create the data you want to pickle over to the other player so he has the same fruit
 				fruitData = FruitData(fruitInt=self.randFruitInt,xpos=self.randXPos,vspeed=self.randVSpeed,foodType=self.foodType,fruitID=self.fruitID)
 				#add the fruit data over to connection's queue so it can send it over to server (then to other player)
-				self.fruitConn.fruitQueue.put(fruitData)
+				#self.fruitConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
+				fruitToAdd2 = Fruit(self,type=self.foodType,xpos=xpos+self.width/2,randFruitInt=randFruitInt,vspeed=vspeed,fruitID=self.fruitID,side='left')
+				self.fruits.append(fruitToAdd2)
+
 			#every 3 seconds generate a veggie, do same thing as above
 			if self.current_ticks %120 == 0:
 				self.foodType = 'vegetable'
