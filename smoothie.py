@@ -4,8 +4,6 @@ import pickle
 import sys
 from blender import Blender
 from fruit import Fruit
-from progressBar import ProgressBar
-from blackRect import BlackRect
 from scoreLabel import ScoreLabel
 from playerLabel import PlayerLabel
 from fruitdata import FruitData
