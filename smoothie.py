@@ -99,6 +99,31 @@ class GameSpace:
 		self.gameLabels.append(self.oppLabel)
 
 		
+	def countDown(self):
+		self.screen.fill(self.black)
+		text = "3"
+		if self.current_ticks <60:
+			text = "3"
+		elif self.current_ticks < 120:
+			text = "2"
+		elif self.current_ticks < 180:
+			text = "1"
+		else:
+			self.fruitConn.startGameLoop()
+			return 0
+
+		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
+		#handle user inputs
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.display.quit()
+				self.fruitConn.lc.stop()
+				self.fruitConn.closeConn()
+				return 1
+
+		self.current_ticks+=1
+		self.screen.blit(winnerLabel.label,winnerLabel.rect)
+		pygame.display.flip()
 
 	def gameLoopIteration(self):
 		#if you or opponent won, stop the looping call and tell the connection which will generate a new looping call

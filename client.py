@@ -67,7 +67,8 @@ class FruitConn(LineReceiver):
 			self.gs = GameSpace(self,self.playerNumber,self.randSeed)
 			self.client.blenderConn.gs = self.gs
 			self.gs.main()
-			self.lc = LoopingCall(self.gs.gameLoopIteration)
+			#self.lc = LoopingCall(self.gs.gameLoopIteration)
+			self.lc = LoopingCall(self.gs.countDown)
 			self.lc.start(1/60)
 			self.client.blenderConn.sendMyData()
 		else:
@@ -88,6 +89,10 @@ class FruitConn(LineReceiver):
 				self.gs.freezeRightFruitWithID(fruitData.freezeID)
 	
 
+	def startGameLoop(self):
+		self.lc.stop()
+		self.lc = LoopingCall(self.gs.gameLoopIteration)
+		self.lc.start(1/60)
 
 	def gameOver(self,text):
 		self.lc = LoopingCall(self.gs.goToGameOver,(text))
