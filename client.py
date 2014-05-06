@@ -103,12 +103,10 @@ class FruitConn(LineReceiver):
 
 
 	def freezeLeftFruit(self,fruitID):
-		print 'Player ',str(self.playerNumber),'clicked right, to freeze other left fruit'
 		fruitData = FruitData(dataType='freeze',freezeDirection='left',freezeID=fruitID)
 		self.fruitQueue.put(fruitData)
 
 	def freezeRightFruit(self,fruitID):
-		print 'Player ',str(self.playerNumber),'clicked left, to freeze other right fruit'
 		fruitData = FruitData(dataType='freeze',freezeDirection='right',freezeID=fruitID)
 		self.fruitQueue.put(fruitData)
 

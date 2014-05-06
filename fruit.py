@@ -30,7 +30,10 @@ class Fruit(pygame.sprite.Sprite):
 
 		#get rand x starting pos
 		#self.xpos = random.randint(0,self.gs.width/2-self.rect.width)
-		self.xpos = xpos-self.rect.width
+		if xpos+self.rect.width>=self.gs.width:
+			self.xpos = xpos-self.rect.width
+		else:
+			self.xpos = xpos
 		self.ypos = -self.rect.height-10 #start it a little bit above the screen
 		self.rect = self.rect.move(self.xpos,self.ypos)
 
