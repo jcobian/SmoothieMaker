@@ -1,3 +1,10 @@
+'''
+Jonathan Cobian and Oliver Lamb
+Client is a wrapper for the connections to the server
+Fruit Conn sends information about the creation of fruits and when fruits are frozen
+Blender Conn sends 
+'''
+
 from twisted.internet import protocol,reactor
 from twisted.internet.task import LoopingCall
 from twisted.protocols.basic import LineReceiver
@@ -18,12 +25,6 @@ class Client():
 
 		reactor.run()
 
-
-
-
-
-			 
-	
 
 
 class FruitConn(LineReceiver):

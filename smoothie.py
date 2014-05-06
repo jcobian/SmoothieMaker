@@ -102,6 +102,10 @@ class GameSpace:
 	def countDown(self):
 		self.screen.fill(self.black)
 		text = "3"
+		message = 'You are the pink player on the left'
+		if self.playerNumber == 2:
+			message = 'You are the green player on the left'
+		playerLabel = PlayerLabel(self,textLabel=message,xpos=self.width/2,ypos = self.height/2+100,size=50)
 		if self.current_ticks <60:
 			text = "3"
 		elif self.current_ticks < 120:
@@ -112,7 +116,7 @@ class GameSpace:
 			self.fruitConn.startGameLoop()
 			return 0
 
-		winnerLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
+		numLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
 		#handle user inputs
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -122,7 +126,9 @@ class GameSpace:
 				return 1
 
 		self.current_ticks+=1
-		self.screen.blit(winnerLabel.label,winnerLabel.rect)
+		self.screen.blit(numLabel.label,numLabel.rect)
+		self.screen.blit(playerLabel.label,playerLabel.rect)
+
 		pygame.display.flip()
 
 	def gameLoopIteration(self):
