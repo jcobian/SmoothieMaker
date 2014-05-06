@@ -126,7 +126,7 @@ class GameSpace:
 				#rand fruit int will determine which image is loaded
 				self.randFruitInt = randFruitInt
 				#random position of where it will start on x axis
-				xpos = random.randint(0,self.width/4)
+				xpos = random.randint(0,self.width/2)
 				self.randXPos = xpos
 				#random velocity
 				vspeed = random.randint(3,6)
