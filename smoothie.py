@@ -129,7 +129,10 @@ class GameSpace:
 		#if you or opponent won, stop the looping call and tell the connection which will generate a new looping call
 		if self.score >= self.winningScore:
 			self.fruitConn.lc.stop()
-			self.fruitConn.gameOver('You Won')
+			if self.opponentScore>= self.winningScore:
+				self.fruitConn.gameOver('Tie!')
+			else:
+				self.fruitConn.gameOver('You Won')
 			return 0
 		elif self.opponentScore >= self.winningScore:
 			self.fruitConn.lc.stop()
@@ -137,10 +140,9 @@ class GameSpace:
 			return 0
 		#otherwise game is not over
 		else:
-			#every 2 seconds generate a fruit
-			if self.current_ticks%90 == 0:
+			#every 1 second generate a fruit
+			if self.current_ticks%60 == 0:
 				self.foodType = 'fruit'
-
 				#10% chance of getting a gold fruit (which is worth double)
 				goldRandNum = random.randint(0,9)
 				if goldRandNum == 0:
@@ -169,8 +171,8 @@ class GameSpace:
 				self.fruits.append(fruitToAdd)
 				
 
-			#every 3 seconds generate a veggie, do same thing as above
-			if self.current_ticks %120 == 0:
+			#every 1.67 seconds generate a veggie, do same thing as above
+			if self.current_ticks %100 == 0:
 				self.foodType = 'vegetable'
 				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
 				self.randFruitInt = randFruitInt
