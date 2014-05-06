@@ -9,12 +9,19 @@ from playerLabel import PlayerLabel
 from fruitdata import FruitData
 #main gamespace where the overarching game structure is
 class GameSpace:
-	def __init__(self,fruitConn,playerNumber,randSeed):
+	def __init__(self,fruitConn,playerNumber,randSeed,minFruitSpeed,maxFruitSpeed):
 		#reference to the connection to the server
 		self.fruitConn = fruitConn
 
 		self.playerNumber = playerNumber
 		random.seed(randSeed)
+		self.minSpeed = minFruitSpeed
+		self.maxSpeed = maxFruitSpeed
+		if mode == 'medium':
+			self.maxSpeed = 5
+		if mode == 'fast':
+			self.minSpeed = 2
+			self.maxSpeed = 5
 
 		#list of images
 		self.listOfFruitImages=['images/strawberry.png','images/banana.png','images/raspberry.png','images/blueberry.png']
@@ -166,7 +173,8 @@ class GameSpace:
 				xpos = random.randint(0,self.width/2)
 				self.randXPos = xpos
 				#random velocity
-				vspeed = random.randint(3,6)
+
+				vspeed = random.randint(self.minSpeed,self.maxSpeed)
 				self.randVSpeed = vspeed
 				#give it a unique id
 				self.fruitID = self.counter
@@ -187,7 +195,7 @@ class GameSpace:
 				self.randFruitInt = randFruitInt
 				xpos = random.randint(0,self.width/2)
 				self.randXPos = xpos
-				vspeed = random.randint(3,6)
+				vspeed = random.randint(self.minSpeed,self.maxSpeed)
 				self.randVSpeed = vspeed
 				self.fruitID = self.counter
 				self.counter+=1

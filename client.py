@@ -63,6 +63,8 @@ class FruitConn(LineReceiver):
 			self.playerNumber = int(comp[1])
 			#so that both clients have the same seed to create fruits
 			self.randSeed = int(comp[2])
+			self.minFruitSpeed = int(comp[3])
+			self.maxFruitSpeed = int(comp[4])
 			self.client.blenderConn.playerNumber = self.playerNumber
 			if self.playerNumber == 1:
 				print 'Game Started: You are the Pink Player'
@@ -70,7 +72,7 @@ class FruitConn(LineReceiver):
 				print 'Game Started: You are the Green Player'
 
 			#create the gamespace and start the loop
-			self.gs = GameSpace(self,self.playerNumber,self.randSeed)
+			self.gs = GameSpace(self,self.playerNumber,self.randSeed,self.minFruitSpeed,self.maxFruitSpeed)
 			self.client.blenderConn.gs = self.gs
 			self.gs.main()
 			self.lc = LoopingCall(self.gs.countDown)
@@ -176,9 +178,13 @@ class BlenderConnFactory(protocol.ClientFactory):
 		return BlenderConn(self.client)
 
 if __name__ == '__main__':
+	if len(sys.argv) <4:
+		print 'usage: python client.py <host machine> <port 1> <port 2> <min fruit speed> <max fruit speed>'
+		sys.exit()
 	host = sys.argv[1]
 	fruitPort = int(sys.argv[2])
 	blenderPort = int(sys.argv[3])
+		
 	client = Client(host,fruitPort,blenderPort)
 
 

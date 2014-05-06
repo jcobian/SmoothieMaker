@@ -12,9 +12,9 @@ class Blender(pygame.sprite.Sprite):
 			self.playerNumber = playerNumber
 			self.playerType = playerType
 			if self.playerNumber == 1:
-				self.image = pygame.image.load("blender.png")
+				self.image = pygame.image.load("images/blender.png")
 			elif self.playerNumber == 2:
-				self.image = pygame.image.load("blender2.png")
+				self.image = pygame.image.load("images/blender2.png")
 			
 			self.rect = self.image.get_rect()
 
