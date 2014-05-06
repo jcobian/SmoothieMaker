@@ -17,6 +17,7 @@ class GameSpace:
 		random.seed(randSeed)
 		self.minSpeed = minFruitSpeed
 		self.maxSpeed = maxFruitSpeed
+		print self.minSpeed,self.maxSpeed
 
 
 		#list of images
