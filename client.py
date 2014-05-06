@@ -2,7 +2,7 @@
 Jonathan Cobian and Oliver Lamb
 Client is a wrapper for the connections to the server
 Fruit Conn sends information about the creation of fruits and when fruits are frozen
-Blender Conn sends 
+Blender Conn sends the player's current position constantly to update it to the opponent's screen
 '''
 
 from twisted.internet import protocol,reactor
@@ -33,13 +33,13 @@ class FruitConn(LineReceiver):
 		self.fruitQueue = DeferredQueue()
 		self.fruitQueue.get().addCallback(self.sendMyData)
 
+	#sends the data over to the server
 	def sendMyData(self,fruitData):	
 			datapd =  pickle.dumps(fruitData)
 			theString = str(self.playerNumber)+':'+datapd
 			self.sendLine(theString)
-			#self.transport.write(theString)
 			self.fruitQueue.get().addCallback(self.sendMyData)
-		
+
 	def connectionMade(self):
 		self.client.fruitConn = self
 		print 'Connection succesfully made to the server'
@@ -49,15 +49,19 @@ class FruitConn(LineReceiver):
 	def closeConn(self):
 		reactor.stop()
 
+	#whenever data is received
 	def lineReceived(self,data):
+		#will happen if server only has one player connected (you)
 		if data == 'waiting for players':
 			print 'Waiting for another player..'
 		elif data == 'lost conn':
 			print 'Connection was lost, sorry'
 			reactor.stop()
+		#will happen if server has two connection. Will send your player number over (PN) along with random seed
 		elif data.startswith('PN'):
 			comp = data.split(':')
 			self.playerNumber = int(comp[1])
+			#so that both clients have the same seed to create fruits
 			self.randSeed = int(comp[2])
 			self.client.blenderConn.playerNumber = self.playerNumber
 			if self.playerNumber == 1:
@@ -65,13 +69,15 @@ class FruitConn(LineReceiver):
 			else:
 				print 'Game Started: You are the Green Player'
 
+			#create the gamespace and start the loop
 			self.gs = GameSpace(self,self.playerNumber,self.randSeed)
 			self.client.blenderConn.gs = self.gs
 			self.gs.main()
-			#self.lc = LoopingCall(self.gs.gameLoopIteration)
 			self.lc = LoopingCall(self.gs.countDown)
 			self.lc.start(1/60)
+			#start sending blender data continuously
 			self.client.blenderConn.sendMyData()
+		#when you receive gameplay data (will either be to add a fruit or freeze a fruit)
 		else:
 			self.parseData(data)
 
@@ -83,34 +89,37 @@ class FruitConn(LineReceiver):
 		fruitData = pickle.loads(comp[1])
 		if fruitData.dataType == 'create':
 			self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
+		#freeze type
 		else:
 			if fruitData.freezeDirection == 'left':
 				self.gs.freezeLeftFruitWithID(fruitData.freezeID)
 			else:
 				self.gs.freezeRightFruitWithID(fruitData.freezeID)
 	
-
+	#will be called after the countdown finishes
 	def startGameLoop(self):
 		self.lc.stop()
 		self.lc = LoopingCall(self.gs.gameLoopIteration)
 		self.lc.start(1/60)
 
+	#will be called once someone wins
 	def gameOver(self,text):
 		self.lc = LoopingCall(self.gs.goToGameOver,(text))
 		self.lc.start(1/60)
 
-
+	#called from gamespace whenever they click on a fruit on the right side of their screen
 	def freezeLeftFruit(self,fruitID):
 		fruitData = FruitData(dataType='freeze',freezeDirection='left',freezeID=fruitID)
 		self.fruitQueue.put(fruitData)
 
+	#called from gamespace whenever they click on a fruit on the left side of their screen
 	def freezeRightFruit(self,fruitID):
 		fruitData = FruitData(dataType='freeze',freezeDirection='right',freezeID=fruitID)
 		self.fruitQueue.put(fruitData)
 
 
 
-
+#continually sends blender data (position)
 class BlenderConn(protocol.Protocol):
 	def __init__(self,client):
 		self.client = client
@@ -134,14 +143,16 @@ class BlenderConn(protocol.Protocol):
 		if data == 'lost conn':
 			print 'Connection was lost, sorry'
 		else:
-			self.parseData(data)
-			self.sendMyData()
+			self.parseData(data) #get position
+			self.sendMyData() #send next position
 
 	def parseData(self,data):
 		comp = data.split(':')
 		pd = comp[1]
 		rect = pickle.loads(pd)
+		#update opponents position on your screen
 		self.gs.updateOpponent(rect)
+		#update opponents score on your screen
 		oppScore = int(comp[2])
 		self.gs.opponentScore = oppScore
 		

@@ -19,12 +19,12 @@ class GameSpace:
 		random.seed(randSeed)
 
 		#list of images
-		self.listOfFruitImages=['strawberry.png','banana.png','raspberry.png','blueberry.png']
-		self.listOfVegetableImages = ['potato.png', 'onion.png','broccoli.png']
-		self.listOfFrozenFruitImages = ['strawberryfrozen.png','bananafrozen.png','raspberryfrozen.png','blueberryfrozen.png']
-		self.listOfFrozenVegetableImages = ['potatofrozen.png', 'frozenonion.png','broccolifrozen.png']
-		self.goldenImage = 'pineapple.png'
-		self.frozenGoldImage = 'pineapplefrozen.png'
+		self.listOfFruitImages=['images/strawberry.png','images/banana.png','images/raspberry.png','images/blueberry.png']
+		self.listOfVegetableImages = ['images/potato.png', 'images/onion.png','images/broccoli.png']
+		self.listOfFrozenFruitImages = ['images/strawberryfrozen.png','images/bananafrozen.png','images/raspberryfrozen.png','images/blueberryfrozen.png']
+		self.listOfFrozenVegetableImages = ['images/potatofrozen.png', 'images/frozenonion.png','images/broccolifrozen.png']
+		self.goldenImage = 'images/pineapple.png'
+		self.frozenGoldImage = 'images/pineapplefrozen.png'
 
 		#list of your fruits and opponents fruits (the ones on the right)
 		self.fruits = list()
@@ -98,14 +98,13 @@ class GameSpace:
 		self.gameLabels.append(self.youLabel)
 		self.gameLabels.append(self.oppLabel)
 
-		
+	#will countdown to start the game as 3,2,1..
 	def countDown(self):
 		self.screen.fill(self.black)
 		text = "3"
 		message = 'You are the pink player on the left'
 		if self.playerNumber == 2:
 			message = 'You are the green player on the left'
-		playerLabel = PlayerLabel(self,textLabel=message,xpos=self.width/2,ypos = self.height/2+100,size=50)
 		if self.current_ticks <60:
 			text = "3"
 		elif self.current_ticks < 120:
@@ -116,7 +115,6 @@ class GameSpace:
 			self.fruitConn.startGameLoop()
 			return 0
 
-		numLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
 		#handle user inputs
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -127,6 +125,10 @@ class GameSpace:
 
 		self.current_ticks+=1
 		gameLabel = PlayerLabel(self,textLabel="Smoothie Maker",xpos=self.width/2,ypos= 100,size=50)
+		playerLabel = PlayerLabel(self,textLabel=message,xpos=self.width/2,ypos = self.height/2+100,size=50)
+		numLabel = PlayerLabel(self,textLabel=text,xpos=self.width/2,ypos=self.height/2,size=50)
+
+
 		self.screen.blit(numLabel.label,numLabel.rect)
 		self.screen.blit(playerLabel.label,playerLabel.rect)
 		self.screen.blit(gameLabel.label,gameLabel.rect)

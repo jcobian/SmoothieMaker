@@ -1,3 +1,8 @@
+
+'''
+Jonathan Cobian and Oliver Lamb
+Fruit Data class represents data that will be sent (and pickled) over the FruitConn
+'''
 class FruitData():
 	def __init__(self,fruitInt=0,xpos=0,vspeed=0,foodType='fruit',fruitID=0,freezeDirection='',freezeID='',dataType='create'):
 		self.dataType = dataType
@@ -12,5 +17,4 @@ class FruitData():
 			self.freezeID = freezeID
 
 
-	def toString(self):
-			return str(self.fruitInt) + ":" + str(self.xpos) + ":" + str(self.vspeed) + ":" + self.foodType + ":" + str(self.fruitID) + ":" + self.freezeString
+	

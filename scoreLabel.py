@@ -1,3 +1,7 @@
+'''
+Jonathan Cobian and Oliver Lamb
+Score Label is a class that represents the label that shows a player's score
+'''
 import pygame
 class ScoreLabel(pygame.sprite.Sprite):
 	def __init__(self, gs=None,playerType='user'):
@@ -13,7 +17,7 @@ class ScoreLabel(pygame.sprite.Sprite):
 			elif self.playerType == 'opponent':
 				self.rect = (self.gs.width-150,50)
 			
-
+	#on each tick, grab the correct score and update the label
 	def tick(self):
 		if self.playerType == 'user':
 			percentage = self.gs.score/float(self.gs.winningScore)
