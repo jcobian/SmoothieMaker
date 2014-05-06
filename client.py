@@ -179,7 +179,7 @@ class BlenderConnFactory(protocol.ClientFactory):
 
 if __name__ == '__main__':
 	if len(sys.argv) <4:
-		print 'usage: python client.py <host machine> <port 1> <port 2> <min fruit speed> <max fruit speed>'
+		print 'usage: python client.py <host machine> <port 1> <port 2>'
 		sys.exit()
 	host = sys.argv[1]
 	fruitPort = int(sys.argv[2])

@@ -17,11 +17,7 @@ class GameSpace:
 		random.seed(randSeed)
 		self.minSpeed = minFruitSpeed
 		self.maxSpeed = maxFruitSpeed
-		if mode == 'medium':
-			self.maxSpeed = 5
-		if mode == 'fast':
-			self.minSpeed = 2
-			self.maxSpeed = 5
+
 
 		#list of images
 		self.listOfFruitImages=['images/strawberry.png','images/banana.png','images/raspberry.png','images/blueberry.png']
