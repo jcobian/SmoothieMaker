@@ -126,8 +126,11 @@ class GameSpace:
 				return 1
 
 		self.current_ticks+=1
+		gameLabel = PlayerLabel(self,textLabel="Smoothie Maker",xpos=self.width/2,ypos= 100,size=50)
 		self.screen.blit(numLabel.label,numLabel.rect)
 		self.screen.blit(playerLabel.label,playerLabel.rect)
+		self.screen.blit(gameLabel.label,gameLabel.rect)
+
 
 		pygame.display.flip()
 
