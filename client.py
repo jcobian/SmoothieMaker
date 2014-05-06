@@ -77,23 +77,16 @@ class FruitConn(LineReceiver):
 
 
 	def parseData(self,data):
-		try:
-			comp = data.split(':')
-			fruitData = pickle.loads(comp[1])
-			if fruitData.dataType == 'create':
-				self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
+		comp = data.split(':')
+		fruitData = pickle.loads(comp[1])
+		if fruitData.dataType == 'create':
+			self.gs.addFruit(fruitData.fruitInt,fruitData.xpos,fruitData.vspeed,fruitData.foodType,fruitData.fruitID)
+		else:
+			if fruitData.freezeDirection == 'left':
+				self.gs.freezeLeftFruitWithID(fruitData.freezeID)
 			else:
-				if fruitData.freezeDirection == 'left':
-					self.gs.freezeLeftFruitWithID(fruitData.freezeID)
-				else:
-					self.gs.freezeRightFruitWithID(fruitData.freezeID)
-			#self.fruitQueue.get().addCallback(self.sendMyData)
-			#self.transport.write('finished fruit data:'+str(self.playerNumber))
-			
-		except Exception as ex:
-			print 'Error!'
-			print str(ex)
-			print comp
+				self.gs.freezeRightFruitWithID(fruitData.freezeID)
+	
 
 
 	def gameOver(self,text):

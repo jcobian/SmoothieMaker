@@ -60,6 +60,7 @@ class GameSpace:
 		
 
 		self.screen = pygame.display.set_mode(self.size)
+		pygame.display.set_caption('Smoothie Maker')
 		#counter of ticks
 		self.current_ticks = 0
 		
