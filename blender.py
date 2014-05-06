@@ -1,5 +1,11 @@
+'''
+Jonathan Cobian and Oliver Lamb
+Blender class represents the blender in the game. It holds the images and rectangles, as well as the move function.
+'''
 import pygame
+
 class Blender(pygame.sprite.Sprite):
+
 	def __init__(self, gs=None,hspeed=0.0,playerNumber=1,playerType='user'):
 			pygame.sprite.Sprite.__init__(self)
 			self.gs = gs
@@ -32,6 +38,9 @@ class Blender(pygame.sprite.Sprite):
 				self.rightBound = self.gs.width
 
 			self.hspeed = hspeed
+
+	#tick checks collision detection between blender and fruit's colliderect
+	#if collison adds appropriate value to score and deletes fruit or vegetable from the list so it will not show up on the screen
 	def tick(self):
 		if self.playerType == 'user':
 			fruitRects = list()
@@ -50,6 +59,7 @@ class Blender(pygame.sprite.Sprite):
 						self.gs.addToScore()
 				elif food.type == 'vegetable':
 					self.gs.subFromScore()
+		#check if opponent collided with any food items
 		else:
 			fruitRects = list()
 			for fruit in self.gs.fruitsOpp:
@@ -57,13 +67,9 @@ class Blender(pygame.sprite.Sprite):
 			indicies = self.colliderect.collidelistall(fruitRects)
 			for index in indicies:
 				self.gs.fruitsOpp.pop(index)
-				
 
-
-
-
-
-
+	#determine which arrow key was hit and then moves the image(rectangle) accordingly;
+	#then moves the colliderect (which is a smaller rect used to determine collisions) to follow the blender image
 	def move(self,key):
 		if key == pygame.K_RIGHT:
 			if (self.rect.left + self.rect.width + self.hspeed)<self.rightBound:
