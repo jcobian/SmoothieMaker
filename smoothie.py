@@ -242,7 +242,7 @@ class GameSpace:
 	def addToScore(self,double=False):
 		self.score+=10
 		if double == True:
-			self.score*=2
+			self.score+=10
 
 		if self.score > self.winningScore:
 			self.score = self.winningScore
