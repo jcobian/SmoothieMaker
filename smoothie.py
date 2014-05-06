@@ -112,7 +112,7 @@ class GameSpace:
 		#otherwise game is not over
 		else:
 			#every 2 seconds generate a fruit
-			if self.current_ticks%120 == 0:
+			if self.current_ticks%90 == 0:
 				self.foodType = 'fruit'
 
 				#10% chance of getting a gold fruit (which is worth double)
@@ -142,7 +142,7 @@ class GameSpace:
 				self.fruitConn.fruitQueue.put(fruitData)
 				self.fruits.append(fruitToAdd)
 			#every 3 seconds generate a veggie, do same thing as above
-			elif self.current_ticks %180 == 0:
+			if self.current_ticks %120 == 0:
 				self.foodType = 'vegetable'
 				randFruitInt = random.randint(0,len(self.listOfVegetableImages)-1)
 				self.randFruitInt = randFruitInt
